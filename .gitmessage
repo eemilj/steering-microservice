@@ -1,0 +1,9 @@
+# Title: #Issue_Number commit title (preferably max 50 chars)
+
+# Description: What, why and how (could be omitted for small commits)
+
+# To modify the co-authored part of the commit message
+Co-Authored-By: Krasen Parvanov <krasen@student.chalmers.se>
+Co-Authored-By: Alexander Hultén <hultena@student.chalmers.se>
+Co-Authored-By: Eemil Jeskanen <jeskanen@student.chalmers.se>
+Co-Authored-By: Chrysostomos Tsagkidis <chrtsa@student.chalmers.se>
