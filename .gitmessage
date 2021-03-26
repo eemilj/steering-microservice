@@ -1,6 +1,6 @@
-Title: #Issue_Number commit title (preferably max 50 chars)
+#Title: #Issue_Number commit title (preferably max 50 chars)
 
-Description: What, why and how (could be omitted for small commits)
+# Description: What, why and how (could be omitted for small commits)
 
 # To modify the co-authored part of the commit message
 Co-Authored-By: Krasen Parvanov <krasen@student.chalmers.se>
