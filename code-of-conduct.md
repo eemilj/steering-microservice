@@ -18,10 +18,19 @@ The team agreed to collaborate using GitLab’s Issue Boards, as the project man
 In order to enhance traceability and transparency throughout the project, the team will assign and correlate the created Issues with their corresponding requirements, while specifying any acceptance criteria that might be required to ensure the high standards project deliverables.
 
 ### Code contributions
-The team will develop the code base by following the predefined code standards and definition of done. The development would be carried out in pairs and individual (decided during the monday planning).
+The team will develop the code base by following the predefined code standards as seen below and definition of done. The development would be carried out in pairs and individual (decided during the monday planning).
 The commits, merge requests will be done following the templates established by the team at the beginning of the project. 
 Each commit will be linked to the corresponding issue. 
-To ensure code quality the team will carry out code reviews on each merge request, ensuring that the code follows the pre-established standard and that the code has unit tests.
+To ensure code quality the main branch will be protected and the team will carry out code reviews on each merge request, ensuring that the code follows the pre-established standard and that the code has unit tests. Furthermore, a feature sprint branch will be maintained during development in order to ensure that the developed feature is tested and meets the requirements and acceptance criteria before being merged to the master branch. 
+
+### Coding standards
+* Variable and function naming shall follow camelCase convention
+* Variables and functions shall be named in a way that clearly states their use
+* Global variables should be avoided
+* Each function should have a comment above it, explaining the functionality of that function
+* Complex parts of code shall also be commented
+* Curly brackets should be added on the same line
+* Indentation should use 4 spaces
 
 ## How do we ensure that everyone in our group stays informed about individual contributions?
 
@@ -41,6 +50,7 @@ Official meetings: 2 - Monday afternoon and Friday
 Tools: Zoom and Slack
 
 ## How will we solve conflicts?
-* We will vote on the issues that may arise, if there should be a situation where the result is a tie then we will resort to flipping a coin to see which side wins.
+* We will vote on the issues that may arise, if there should be a situation where the result is a tie then we will resort to flipping a coin to see which side wins. 
+* If an individual has an issue with something, then it is the responsibility of said individual to bring up the matter in order to be discussed and try resolve the issue. I.e. the issue could be added to the weekly meeting agenda in order to be discussed on the next meeting.
 * To help stimulate decision making we will have discussions on the various matters to help convince individuals who may not be fully committed to one option or another.
-* If one or more individuals are not contributing to the degree that has been agreed upon, or are not available during the agreed upon meeting slots, or are not communicating to the degree that has been agreed upon, then the course examiner will be contacted for further assistance in the matter.
+* If one or more individuals are not contributing to the degree that has been agreed upon, or are not available during the agreed upon meeting slots, or are not communicating to the degree that has been agreed upon, then the issue will be discussed within the team, if no changes happen, then the course examiner will be contacted for further assistance in the matter.
