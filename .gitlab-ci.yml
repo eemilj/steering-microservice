@@ -35,6 +35,8 @@ before_script:
 
 # This section describes what shall be done to build and test the project.
 build-and-test:
+  only:
+    - branches
   tags:
     - docker-build
   stage: build
@@ -43,6 +45,11 @@ build-and-test:
 
 # This section describes what shall be done to deploy artefacts from the project.
 release:
+  only:
+    refs:
+      - tags
+    variables:
+      - $CI_COMMIT_TAG =~ ^v\d+.\d+.\d+$
   tags:
     - docker-build
   stage: deploy
