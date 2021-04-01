@@ -1,6 +1,7 @@
 #include <iostream>
 #include "PrimeChecker.hpp"
 //Alexander Hultén
+//Chrysostomos Tsagkidis
 int main(int argc, char** argv) {
     if (argc == 2) {
         int number = std::stoi(argv[1]);
