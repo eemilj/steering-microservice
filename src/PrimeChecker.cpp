@@ -1,3 +1,4 @@
+// Comment from krasen
 #include <stdint-gcc.h>
 #include "PrimeChecker.hpp"
 
