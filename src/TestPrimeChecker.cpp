@@ -24,5 +24,5 @@ TEST_CASE("Test PrimeChecker 4.") {
 
 TEST_CASE("Test PrimeChecker 5.") {
     PrimeChecker primeChecker;
-    REQUIRE_FALSE(primeChecker.isPrime(7));
+    REQUIRE(primeChecker.isPrime(7));
 }
