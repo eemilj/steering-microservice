@@ -62,9 +62,13 @@ Then it shall have a description explaining what the commit contains and possibl
 If the commit is co-authored by anyone else, then it must be appended at the end.
 ### Example commit message
 
-> #4 Update README.md<br><br>
-This adds further clarification to the cloning procedure of the repository<br><br>
-Co-Authored-By: Krasen Parvanov <krasen@student.chalmers.se><br>
-Co-Authored-By: Alexander Hultén <hultena@student.chalmers.se><br>
-Co-Authored-By: Eemil Jeskanen <jeskanen@student.chalmers.se><br>
-Co-Authored-By: Chrysostomos Tsagkidis <chrtsa@student.chalmers.se><br>
+```
+#4 Update README.md
+
+This adds further clarification to the cloning procedure of the repository
+
+Co-Authored-By: Krasen Parvanov <krasen@student.chalmers.se>
+Co-Authored-By: Alexander Hultén <hultena@student.chalmers.se>
+Co-Authored-By: Eemil Jeskanen <jeskanen@student.chalmers.se>
+Co-Authored-By: Chrysostomos Tsagkidis <chrtsa@student.chalmers.se>
+```
