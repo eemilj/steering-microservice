@@ -16,8 +16,9 @@ WORKDIR /opt/sources
 RUN cd /opt/sources && \
     mkdir build && \
     cd build && \
-    cmake -D CMAKE_BUILD_TYPE=Release .. && \
-    make && ./helloworld-Runner && make test \
+    cmake .. && \
+    make && \
+    make test &&\
     ./helloworld && \
     cd .. && \
     lcov --directory . --capture --no-external --output-file coverage.info && \
