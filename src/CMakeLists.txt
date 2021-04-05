@@ -11,7 +11,7 @@ set(SOURCES
         )
 
 # Create the executable
-add_executable(HelloWorld ${SOURCES})
+add_executable(helloworld ${SOURCES})
 
 # Create the gcov target. Run coverage tests with 'make gcov'
 add_custom_target(gcov COMMAND mkdir -p coverage
@@ -22,7 +22,7 @@ add_custom_command(TARGET gcov
         COMMAND gcov -b ${CMAKE_SOURCE_DIR}/*.cpp
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/coverage
         )
-add_dependencies(gcov HelloWorld)
+add_dependencies(gcov helloworld)
 
 # Make sure to clean up the coverage folder
 set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES coverage)
