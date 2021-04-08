@@ -8,8 +8,8 @@ RUN apt-get update -y && \
 RUN apt-get install -y --no-install-recommends \
     cmake \
     build-essential \
-    lcov
-
+    lcov \
+    htmldoc
 
 ADD src/ /opt/sources
 WORKDIR /opt/sources
@@ -25,7 +25,8 @@ RUN cd /opt/sources && \
     lcov --remove coverage.info '*.hpp' -o coverage.info && \
     lcov --list coverage.info && \
     genhtml coverage.info --output-directory coverage && \
-    cp -R build/helloworld coverage/ /tmp
+    htmldoc --webpage $(find coverage/sources/ -type f \( -iname \index-sort-f.html -o -iname \*gcov.html \)) --outfile  report.pdf && \
+    cp -R build/helloworld report.pdf /tmp
 
 ##################################################
 # Section 2: Bundle the application.
@@ -36,5 +37,5 @@ RUN apt-get update -y && \
     apt-get dist-upgrade -y
 
 WORKDIR /opt
-COPY --from=builder /tmp/helloworld .
+COPY --from=builder /tmp .
 ENTRYPOINT ["/opt/helloworld"]

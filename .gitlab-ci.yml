@@ -41,8 +41,17 @@ build-and-test:
     - docker-build
   stage: build
   script:
-    - docker build -f Dockerfile .
-
+    - docker build -t group4:latest -f Dockerfile .
+    - docker create --cidfile "cid.txt" group4:latest
+    - docker cp `cat cid.txt`:/opt/report.pdf .
+    - docker rm `cat cid.txt`
+  artifacts:
+        when: always
+        expose_as: 'code coverage'
+        paths:
+          - report.pdf
+        expire_in: 2 weeks
+        
 # This section describes what shall be done to deploy artefacts from the project.
 release:
   only:
