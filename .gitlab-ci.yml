@@ -45,7 +45,7 @@ build-and-test:
   artifacts:
         when: always
         paths:
-          - /tmp/coverage/*
+          - /opt/coverage/*
 
 # This section describes what shall be done to deploy artefacts from the project.
 release:
