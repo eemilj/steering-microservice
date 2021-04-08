@@ -47,6 +47,7 @@ build-and-test:
     - docker rm `cat cid.txt`
   artifacts:
         when: always
+        expose_as: 'code coverage'
         paths:
           - report.pdf
         expire_in: 2 weeks
