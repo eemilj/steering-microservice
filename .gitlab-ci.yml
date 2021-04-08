@@ -44,7 +44,7 @@ build-and-test:
     - docker build -f Dockerfile .
 
 # This section describes what shall be done to deploy artefacts from the project.
-release:
+deploy:
   only:
     refs:
       - tags
@@ -56,4 +56,14 @@ release:
   script:
     - docker build -f Dockerfile -t "$CI_REGISTRY_IMAGE":"$CI_COMMIT_TAG" .
     - docker push "$CI_REGISTRY_IMAGE":"$CI_COMMIT_TAG"
+
+release_job:
+  stage: release
   image: "registry.git.chalmers.se/courses/dit638/students/2021-group-04:$CI_COMMIT_TAG"
+  needs:
+    - job: deploy
+  script:
+    - echo 'running release'
+  release:
+    tag_name: $CI_COMMIT_TAG
+    description: "Created using release-cli"
