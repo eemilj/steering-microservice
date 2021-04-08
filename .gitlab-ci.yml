@@ -42,14 +42,13 @@ build-and-test:
   stage: build
   script:
     - docker build -t group4:latest -f Dockerfile .
-    - mkdir coverage
-    - docker create --cidfile "coverage/cid.txt" group4:latest
-    - docker cp `cat coverage/cid.txt`:/opt/coverage .
-    - docker rm `cat coverage/cid.txt`
+    - docker create --cidfile "cid.txt" group4:latest
+    - docker cp `cat cid.txt`:/opt/report.pdf .
+    - docker rm `cat cid.txt`
   artifacts:
         when: always
         paths:
-          - coverage/*
+          - report.pdf
         expire_in: 2 weeks
         
 # This section describes what shall be done to deploy artefacts from the project.
