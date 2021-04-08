@@ -36,5 +36,5 @@ RUN apt-get update -y && \
     apt-get dist-upgrade -y
 
 WORKDIR /opt
-COPY --from=builder /tmp/helloworld .
+COPY --from=builder /tmp .
 ENTRYPOINT ["/opt/helloworld"]
