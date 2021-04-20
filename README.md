@@ -42,6 +42,12 @@ docker build -t <name>  -f Dockerfile . # Where <name>  is the name of the docke
 ```bash
 docker run --rm <name> 
 ```
+# Architecture
+
+## Top Level Architecture Overview
+
+![Top Level Component Diagram](./diagrams/top-level-component-diagram-v1.png "Top Level Component Diagram")
+
 
 # Team’s workflow
 The team will work in an iterative manner where features are added as we iterate over new builds.
