@@ -22,6 +22,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} \
     -D_XOPEN_SOURCE=700 \
     -D_FORTIFY_SOURCE=2 \
     -O2 \
+    -fprofile-arcs \
+    -ftest-coverage \
     -fstack-protector \
     -fomit-frame-pointer \
     -pipe \
@@ -77,6 +79,8 @@ set(LIBRARIES ${LIBRARIES} ${OpenCV_LIBS})
 ################################################################################
 # Create executable.
 add_executable(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/src/${PROJECT_NAME}.cpp)
+add_executable(${PROJECT_NAME}-Runner
+        ${CMAKE_CURRENT_SOURCE_DIR}/test/tester.cpp)
 target_link_libraries(${PROJECT_NAME} ${LIBRARIES})
 
 # Add dependency to OpenDLV Standard Message Set.
@@ -109,6 +113,5 @@ add_custom_target(scrub
         )
 
 # Testing
-#enable_testing()
-#add_executable(${PROJECT_NAME}-Runner )
-#add_test(NAME ${PROJECT_NAME}-Runner COMMAND ${PROJECT_NAME}-Runner)
+enable_testing()
+add_test(NAME ${PROJECT_NAME}-Runner COMMAND ${PROJECT_NAME}-Runner)
