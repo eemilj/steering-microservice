@@ -24,6 +24,8 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
+#include "ImageProcessing.h"
+
 int32_t main(int32_t argc, char **argv) {
     int32_t retCode{1};
     // Parse the command line parameters as we require the user to specify some mandatory information on startup.
@@ -88,8 +90,12 @@ int32_t main(int32_t argc, char **argv) {
 
                 // TODO: Do something with the frame.
                 // Example: Draw a red rectangle and display image.
-                cv::rectangle(img, cv::Point(50, 50), cv::Point(100, 100), cv::Scalar(0,0,255));
+                ImageProcessing imageProcessing;
+                cv::Mat mask;
 
+                mask = imageProcessing.processImage(img);
+
+                cv::putText(mask, std::to_string(gsr.groundSteering()), cv::Point(0,50), cv::FONT_HERSHEY_PLAIN, 1.0, cv::Scalar(255,255,255), 1, false);
                 // If you want to access the latest received ground steering, don't forget to lock the mutex:
                 {
                     std::lock_guard<std::mutex> lck(gsrMutex);
@@ -98,7 +104,7 @@ int32_t main(int32_t argc, char **argv) {
 
                 // Display image on your screen.
                 if (VERBOSE) {
-                    cv::imshow(sharedMemory->name().c_str(), img);
+                    cv::imshow(sharedMemory->name().c_str(), mask);
                     cv::waitKey(1);
                 }
             }

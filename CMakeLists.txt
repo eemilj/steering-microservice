@@ -78,7 +78,7 @@ set(LIBRARIES ${LIBRARIES} ${OpenCV_LIBS})
 
 ################################################################################
 # Create executable.
-add_executable(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/src/${PROJECT_NAME}.cpp)
+add_executable(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/src/${PROJECT_NAME}.cpp  ${CMAKE_CURRENT_SOURCE_DIR}/src/ImageProcessing.h ${CMAKE_CURRENT_SOURCE_DIR}/src/ImageProcessing.cpp)
 add_executable(${PROJECT_NAME}-Runner
         ${CMAKE_CURRENT_SOURCE_DIR}/test/tester.cpp)
 target_link_libraries(${PROJECT_NAME} ${LIBRARIES})
