@@ -8,6 +8,8 @@ class ImageProcessor {
 
 public:
     cv::Mat processImage(const cv::Mat& image, int width, int height);
+    cv::Mat cropImage(const cv::Mat& image, int width, int height);
+    cv::Mat filterImage(const cv::Mat& image, const cv::Scalar& hi, const cv::Scalar& lo);
 };
 
 
