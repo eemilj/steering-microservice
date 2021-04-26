@@ -28,7 +28,7 @@ RUN cd /opt/sources && \
     lcov --remove coverage.info '*.hpp' -o coverage.info && \
     lcov --list coverage.info && \
     genhtml coverage.info --output-directory coverage && \
-    htmldoc --webpage $(find coverage/test/ -type f \( -iname \index-sort-f.html -o -iname \*gcov.html \)) --outfile  report.pdf && \
+    htmldoc --webpage coverage/src/index-sort-f.html $(find coverage/src -type f \( -iname \*gcov.html \)) --outfile report.pdf && \
     cp -R build/ report.pdf /tmp
 
 # Second stage for packaging the software into a software bundle:
