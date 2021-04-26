@@ -24,7 +24,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-#include "ImageProcessing.h"
+#include "ImageProcessor.h"
 
 int32_t main(int32_t argc, char **argv) {
     int32_t retCode{1};
@@ -73,7 +73,9 @@ int32_t main(int32_t argc, char **argv) {
             // Endless loop; end the program by pressing Ctrl-C.
             while (od4.isRunning()) {
                 // OpenCV data structure to hold an image.
-                cv::Mat img;
+                cv::Mat img, processedImg;
+                //Image processor
+                ImageProcessor imageProcessor;
 
                 // Wait for a notification of a new frame.
                 sharedMemory->wait();
@@ -89,13 +91,10 @@ int32_t main(int32_t argc, char **argv) {
                 sharedMemory->unlock();
 
                 // TODO: Do something with the frame.
-                // Example: Draw a red rectangle and display image.
-                ImageProcessing imageProcessing;
-                cv::Mat mask;
 
-                mask = imageProcessing.processImage(img);
+                processedImg = imageProcessor.processImage(img, WIDTH, HEIGHT);
 
-                cv::putText(mask, std::to_string(gsr.groundSteering()), cv::Point(0,50), cv::FONT_HERSHEY_PLAIN, 1.0, cv::Scalar(255,255,255), 1, false);
+                cv::putText(processedImg, std::to_string(gsr.groundSteering()), cv::Point(0,50), cv::FONT_HERSHEY_PLAIN, 1.0, cv::Scalar(255,255,255), 1, false);
                 // If you want to access the latest received ground steering, don't forget to lock the mutex:
                 {
                     std::lock_guard<std::mutex> lck(gsrMutex);
@@ -104,7 +103,7 @@ int32_t main(int32_t argc, char **argv) {
 
                 // Display image on your screen.
                 if (VERBOSE) {
-                    cv::imshow(sharedMemory->name().c_str(), mask);
+                    cv::imshow(sharedMemory->name().c_str(), processedImg);
                     cv::waitKey(1);
                 }
             }

@@ -47,8 +47,8 @@ RUN apt-get install -y --no-install-recommends \
     libopencv-imgproc3.2
 
 WORKDIR /usr/bin
-COPY --from=builder /tmp/build/steering-microservice .
+COPY --from=builder /tmp/build/SteeringMicroservice .
 WORKDIR /opt
 COPY --from=builder /tmp/report.pdf .
 # This is the entrypoint when starting the Docker container; hence, this Docker image is automatically starting our software on its creation
-ENTRYPOINT ["/usr/bin/steering-microservice"]
+ENTRYPOINT ["/usr/bin/SteeringMicroservice"]

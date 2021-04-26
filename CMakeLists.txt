@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.2)
-project(steering-microservice)
+project(SteeringMicroservice)
 
 ################################################################################
 # Defining the relevant versions of OpenDLV Standard Message Set and libcluon.
@@ -78,7 +78,7 @@ set(LIBRARIES ${LIBRARIES} ${OpenCV_LIBS})
 
 ################################################################################
 # Create executable.
-add_executable(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/src/${PROJECT_NAME}.cpp  ${CMAKE_CURRENT_SOURCE_DIR}/src/ImageProcessing.h ${CMAKE_CURRENT_SOURCE_DIR}/src/ImageProcessing.cpp)
+add_executable(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/src/${PROJECT_NAME}.cpp src/ImageProcessor.cpp)
 add_executable(${PROJECT_NAME}-Runner
         ${CMAKE_CURRENT_SOURCE_DIR}/test/tester.cpp)
 target_link_libraries(${PROJECT_NAME} ${LIBRARIES})
@@ -100,7 +100,7 @@ add_custom_command(TARGET gcov
         COMMAND gcov -b ${CMAKE_SOURCE_DIR}/*.cpp
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/coverage
         )
-add_dependencies(gcov steering-microservice)
+add_dependencies(gcov SteeringMicroservice)
 
 # Make sure to clean up the coverage folder
 set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES coverage)
