@@ -25,6 +25,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 
 #include "ImageProcessor.h"
+#include "ConeDetector.h"
 
 int32_t main(int32_t argc, char **argv) {
     int32_t retCode{1};
@@ -93,17 +94,25 @@ int32_t main(int32_t argc, char **argv) {
                 // TODO: Do something with the frame.
 
                 processedImg = imageProcessor.processImage(img, WIDTH, HEIGHT);
-
-                cv::putText(processedImg, std::to_string(gsr.groundSteering()), cv::Point(0,50), cv::FONT_HERSHEY_PLAIN, 1.0, cv::Scalar(255,255,255), 1, false);
+                std::pair<cv::Point, cv::Point> foundPoints = ConeDetector::findCenterCoordinate(processedImg);
+                foundPoints.first.y = foundPoints.first.y+240;
+                foundPoints.second.y = foundPoints.second.y+240;
+                cv::circle(img, foundPoints.first, 3, cv::Scalar(0,0,255), 2);
+                cv::circle(img, foundPoints.second, 3, cv::Scalar(0,0,255), 2);
+                cv::line(img, foundPoints.first, foundPoints.second, cv::Scalar(0,0,255), 2);
+                //processedImg = imageProcessor.denoiseImage(processedImg);
+                cv::putText(img, std::to_string(gsr.groundSteering()), cv::Point(0,50), cv::FONT_HERSHEY_PLAIN, 1.0, cv::Scalar(255,255,255), 1, false);
                 // If you want to access the latest received ground steering, don't forget to lock the mutex:
+
                 {
                     std::lock_guard<std::mutex> lck(gsrMutex);
                     std::cout << "main: groundSteering = " << gsr.groundSteering() << std::endl;
+
                 }
 
                 // Display image on your screen.
                 if (VERBOSE) {
-                    cv::imshow(sharedMemory->name().c_str(), processedImg);
+                    cv::imshow(sharedMemory->name().c_str(), img);
                     cv::waitKey(1);
                 }
             }

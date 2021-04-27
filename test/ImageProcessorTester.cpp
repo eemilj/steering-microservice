@@ -16,7 +16,7 @@ TEST_CASE("Test crop function") {
     image = cv::Mat(height, width, CV_64FC1);
     output = imageProcessor.cropImage(image, image.cols, image.rows);
     REQUIRE(output.cols == width);
-    REQUIRE(output.rows == height/2);
+    REQUIRE(output.rows == int((height/2)/1.8));
 }
 
 TEST_CASE("Test HSV shifting") {
