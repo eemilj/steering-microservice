@@ -7,10 +7,10 @@
 class ImageProcessor {
 
 public:
-    cv::Mat processImage(const cv::Mat& image, int width, int height);
-    cv::Mat cropImage(const cv::Mat& image, int width, int height);
-    cv::Mat filterImage(const cv::Mat& image, const cv::Scalar& hi, const cv::Scalar& lo);
-    cv::Mat denoiseImage(const cv::Mat& image);
+    static cv::Mat processImage(const cv::Mat& image, cv::Scalar lowRange, cv::Scalar highRange);
+    static cv::Mat cropImage(const cv::Mat& image, int width, int height);
+    static cv::Mat filterImage(const cv::Mat& image, const cv::Scalar& hi, const cv::Scalar& lo);
+    static cv::Mat denoiseImage(const cv::Mat& image);
 };
 
 

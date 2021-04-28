@@ -15,6 +15,7 @@ cv::Point pointFinder(cv::Moments moment) {
     foundPoint.y = centerY;
     return foundPoint;
 }
+
 std::pair<cv::Point, cv::Point> ConeDetector::findCenterCoordinate(const cv::Mat& image) {
     //cv::Rect boundingRectangle;
     std::vector<cv::Vec4i> elementsHierarchy;

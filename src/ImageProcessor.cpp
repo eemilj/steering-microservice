@@ -1,21 +1,14 @@
 #include "ImageProcessor.h"
 
-cv::Mat ImageProcessor::processImage(const cv::Mat& image, int width, int height) {
-    cv::Mat maskBlue, maskYellow, croppedImage, processedImage;
-    cv::Scalar blueLow, blueHigh, yellowLow, yellowHigh;
-
-    blueLow = cv::Scalar(100, 100, 45); //100, 100, 45
-    blueHigh = cv::Scalar(150,255,255);
-
-    yellowLow = cv::Scalar(14, 100, 120);
-    yellowHigh = cv::Scalar(30,255,255);
+cv::Mat ImageProcessor::processImage(const cv::Mat& image, cv::Scalar lowRange, cv::Scalar highRange) {
+    cv::Mat maskColor, croppedImage, processedImage;
+    int width, height;
+    height = image.rows;
+    width = image.cols;
 
     croppedImage = cropImage(image, width, height);
-    maskBlue = filterImage(croppedImage, blueHigh, blueLow);
-    //maskYellow = filterImage(croppedImage, yellowHigh, yellowLow);
-    //processedImage = maskYellow + maskBlue;
-    processedImage = maskBlue;
-    processedImage = denoiseImage(processedImage);
+    maskColor = filterImage(croppedImage, highRange, lowRange);
+    processedImage = denoiseImage(maskColor);
 
     return processedImage;
 }

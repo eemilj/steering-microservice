@@ -78,9 +78,9 @@ set(LIBRARIES ${LIBRARIES} ${OpenCV_LIBS})
 
 ################################################################################
 # Create executable.
-add_executable(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/src/${PROJECT_NAME}.cpp src/ImageProcessor.cpp src/ConeDetector.cpp src/ConeDetector.h)
+add_executable(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/src/${PROJECT_NAME}.cpp src/ImageProcessor.cpp src/ConeDetector.cpp src/ConeDetector.h src/ImageRecognitionController.cpp src/ImageRecognitionController.h)
 add_executable(${PROJECT_NAME}-Runner
-        ${CMAKE_CURRENT_SOURCE_DIR}/test/ImageProcessorTester.cpp src/ImageProcessor.cpp src/ConeDetector.cpp)
+        ${CMAKE_CURRENT_SOURCE_DIR}/test/ImageProcessorTester.cpp src/ImageProcessor.cpp src/ConeDetector.cpp src/ImageRecognitionController.cpp)
 target_link_libraries(${PROJECT_NAME} ${LIBRARIES})
 target_link_libraries(${PROJECT_NAME}-Runner ${LIBRARIES})
 
