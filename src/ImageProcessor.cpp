@@ -37,9 +37,18 @@ cv::Mat ImageProcessor::filterImage(const cv::Mat& image, const cv::Scalar& hi, 
 
 cv::Mat ImageProcessor::denoiseImage(const cv::Mat &image) {
     cv::Mat outputImage;
+    //196 hits with old, 477 hits in close followed by open, 707 in open followed by close
 
-    cv::erode(image, outputImage, cv::Mat(), cv::Point(-1,-1), 3);
-    cv::dilate(outputImage, outputImage,cv::Mat(),cv::Point(-1,-1), 4); //4 was found
+    //fill objects
+    cv::morphologyEx(image, outputImage, cv::MORPH_OPEN,
+                     cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
+
+    //remove noise
+    cv::morphologyEx(image, outputImage, cv::MORPH_CLOSE,
+                     cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(7, 7)));
+
+    //cv::erode(image, outputImage, cv::Mat(), cv::Point(-1,-1), 3);
+    //cv::dilate(outputImage, outputImage,cv::Mat(),cv::Point(-1,-1), 4); //4 was found
 
     return outputImage;
 }

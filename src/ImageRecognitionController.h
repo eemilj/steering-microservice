@@ -5,8 +5,8 @@
 #include <opencv2/imgproc/imgproc.hpp>
 
 struct cones {
-    std::pair<cv::Point, cv::Point> blue;
-    std::pair<cv::Point, cv::Point> yellow;
+    std::pair<cv::Point, cv::Point> blue = {};
+    std::pair<cv::Point, cv::Point> yellow = {};
 };
 
 class ImageRecognitionController {

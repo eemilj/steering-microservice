@@ -25,6 +25,8 @@
 #include <opencv2/imgproc/imgproc.hpp>
 
 #include "ImageRecognitionController.h"
+#include "SteeringAngleCalculator.h"
+#include "ImageProcessor.h"
 
 int32_t main(int32_t argc, char **argv) {
     int32_t retCode{1};
@@ -65,12 +67,30 @@ int32_t main(int32_t argc, char **argv) {
                 // https://github.com/chrberger/libcluon/blob/master/libcluon/testsuites/TestEnvelopeConverter.cpp#L31-L40
                 std::lock_guard<std::mutex> lck(gsrMutex);
                 gsr = cluon::extractMessage<opendlv::proxy::GroundSteeringRequest>(std::move(env));
-                std::cout << "lambda: groundSteering = " << gsr.groundSteering() << std::endl;
+                //std::cout << "lambda: groundSteering = " << gsr.groundSteering() << std::endl;
             };
 
             od4.dataTrigger(opendlv::proxy::GroundSteeringRequest::ID(), onGroundSteeringRequest);
 
             // Endless loop; end the program by pressing Ctrl-C.
+            int frameCounter = 0;
+
+            cv::namedWindow("Inspector", cv::WINDOW_AUTOSIZE);
+            int minH{100};
+            int maxH{150};
+            cv::createTrackbar("Hue (min)", "Inspector", &minH, 179);
+            cv::createTrackbar("Hue (max)", "Inspector", &maxH, 179);
+
+            int minS{100};
+            int maxS{255};
+            cv::createTrackbar("Sat (min)", "Inspector", &minS, 255);
+            cv::createTrackbar("Sat (max)", "Inspector", &maxS, 255);
+
+            int minV{35};
+            int maxV{255};
+            cv::createTrackbar("Val (min)", "Inspector", &minV, 255);
+            cv::createTrackbar("Val (max)", "Inspector", &maxV, 255);
+
             while (od4.isRunning()) {
                 // OpenCV data structure to hold an image.
                 cv::Mat img, processedImg;
@@ -90,7 +110,14 @@ int32_t main(int32_t argc, char **argv) {
 
                 // TODO: Do something with the frame.
                 cones foundCones = ImageRecognitionController::findConeCoordinates(img);
-                foundCones.yellow.first.y = foundCones.yellow.first.y+240;
+
+                double steeringAngle = SteeringAngleCalculator::calculateSteeringAngle(foundCones);
+                if(steeringAngle < 2){
+                    frameCounter++;
+                    std::cout << "Valid frames: " << frameCounter;
+                }
+
+                /*foundCones.yellow.first.y = foundCones.yellow.first.y+240;
                 foundCones.yellow.second.y = foundCones.yellow.second.y+240;
                 cv::circle(img, foundCones.yellow.first, 3, cv::Scalar(0,0,255), 2);
                 cv::circle(img, foundCones.yellow.second, 3, cv::Scalar(0,0,255), 2);
@@ -103,18 +130,38 @@ int32_t main(int32_t argc, char **argv) {
                 cv::line(img, foundCones.blue.first, foundCones.blue.second, cv::Scalar(0,0,255), 2);
 
                 cv::putText(img, std::to_string(gsr.groundSteering()), cv::Point(0,50),
-                            cv::FONT_HERSHEY_PLAIN, 1.0, cv::Scalar(255,255,255), 1, false);
+                            cv::FONT_HERSHEY_PLAIN, 1.0, cv::Scalar(255,255,255), 1, false);*/
                 // If you want to access the latest received ground steering, don't forget to lock the mutex:
+
+
+
+                cv::Mat output;
+                cv::Mat hsvImg;
+                cv::Mat channels[3];
+                cv::cvtColor(img,img, cv::COLOR_BGRA2BGR);
+                cv::cvtColor(img, hsvImg, cv::COLOR_BGR2HSV);
+                cv::split(hsvImg, channels);
+                channels[1] = channels[1]*1.6;
+                channels[2] = channels[2]*1.3;
+                cv::merge(channels,3, hsvImg);
+                cv::cvtColor(hsvImg, img, cv::COLOR_HSV2BGR);
+                cv::bilateralFilter(img, output, 0, 20, 5);
+
+                cv::Scalar blueLow = cv::Scalar(100, 100, 35); //100, 100, 45
+                cv::Scalar blueHigh = cv::Scalar(150,255,255); //150, 255, 255
+                cv::Scalar yellowLow = cv::Scalar(14, 100, 120);
+                cv::Scalar yellowHigh = cv::Scalar(30,255,255);
+                cv::Mat testDenoiseImage = ImageProcessor::processImage(output, cv::Scalar(minH, minS, minV), cv::Scalar(maxH, maxS, maxV));
 
                 {
                     std::lock_guard<std::mutex> lck(gsrMutex);
-                    std::cout << "main: groundSteering = " << gsr.groundSteering() << std::endl;
+                    //std::cout << "main: groundSteering = " << gsr.groundSteering() << std::endl;
 
                 }
 
                 // Display image on your screen.
                 if (VERBOSE) {
-                    cv::imshow(sharedMemory->name().c_str(), img);
+                    cv::imshow(sharedMemory->name().c_str(), testDenoiseImage);
                     cv::waitKey(1);
                 }
             }
