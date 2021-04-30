@@ -77,14 +77,15 @@ int32_t main(int32_t argc, char **argv) {
 
             // Endless loop; end the program by pressing Ctrl-C.
             int frameCounter = 0;
+            int realFrameCounter = 0;
 
             cv::namedWindow("Inspector", cv::WINDOW_AUTOSIZE);
-            int minH{90};
-            int maxH{145};
+            int minH{110};
+            int maxH{130};
             cv::createTrackbar("Hue (min)", "Inspector", &minH, 255);
             cv::createTrackbar("Hue (max)", "Inspector", &maxH, 255);
 
-            int minS{170};
+            int minS{140};
             int maxS{255};
             cv::createTrackbar("Sat (min)", "Inspector", &minS, 255);
             cv::createTrackbar("Sat (max)", "Inspector", &maxS, 255);
@@ -119,8 +120,13 @@ int32_t main(int32_t argc, char **argv) {
 
                 if(steeringAngle < 2){
                     frameCounter++;
-                    std::cout << "Valid frames: " << frameCounter;
+                    std::cout << "Valid frames: " << frameCounter << std::endl;
                 }
+                realFrameCounter++;
+                std::cout << "Valid frame percentage: " << double(frameCounter)/double(realFrameCounter)*100 << "%" << std::endl;
+
+                cv::Mat russianMat;
+                russianMat = img.clone();
 
                 foundCones.yellow.first.y = foundCones.yellow.first.y+240;
                 foundCones.yellow.second.y = foundCones.yellow.second.y+240;
@@ -146,6 +152,11 @@ int32_t main(int32_t argc, char **argv) {
                 cv::Scalar yellowHigh = cv::Scalar(30,255,255);
                 cv::Mat testDenoiseImage = ImageProcessor::processImage(img, cv::Scalar(minH, minS, minV), cv::Scalar(maxH, maxS, maxV));
 
+                contours contours;
+                contours = ImageRecognitionController::testingContourDrawing(russianMat);
+                russianMat = testDenoiseImage.clone();
+                cv::drawContours(russianMat, contours.blue, -1, cv::Scalar(255,255,255), 1);
+                cv::drawContours(russianMat, contours.yellow, -1, cv::Scalar(255,255,255), 1);
                 {
                     std::lock_guard<std::mutex> lck(gsrMutex);
                     //std::cout << "main: groundSteering = " << gsr.groundSteering() << std::endl;
@@ -156,6 +167,7 @@ int32_t main(int32_t argc, char **argv) {
                 if (VERBOSE) {
                     cv::imshow("denoise", testDenoiseImage);
                     cv::imshow("img", img);
+                    cv::imshow("ruski", russianMat);
                     cv::waitKey(1);
                 }
                 auto stop = std::chrono::system_clock::now();

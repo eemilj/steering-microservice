@@ -27,8 +27,8 @@ contours ImageRecognitionController::testingContourDrawing(const cv::Mat &image)
     cv::Mat processedImage;
     cv::Scalar blueLow, blueHigh, yellowLow, yellowHigh;
 
-    blueLow = cv::Scalar(90, 145, 55); //100, 100, 45
-    blueHigh = cv::Scalar(125,255,125);
+    blueLow = cv::Scalar(110, 140, 55); //100, 100, 45
+    blueHigh = cv::Scalar(135,255,125);
 
     yellowLow = cv::Scalar(14, 100, 120);
     yellowHigh = cv::Scalar(30,255,255);

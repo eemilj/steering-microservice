@@ -54,11 +54,11 @@ cv::Mat ImageProcessor::denoiseImage(const cv::Mat &image) {
 
     //remove noise
     cv::morphologyEx(image, outputImage, cv::MORPH_OPEN,
-                     cv::getStructuringElement(cv::MORPH_RECT, cv::Size(5, 5)));
+                     cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(3, 3)));
 
     //fill objects
     cv::morphologyEx(outputImage, outputImage, cv::MORPH_CLOSE,
-                     cv::getStructuringElement(cv::MORPH_RECT, cv::Size(5, 5)));
+                     cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(10, 10)));
     //smooth the image
     cv::medianBlur(outputImage, outputImage, 5);
 
