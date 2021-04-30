@@ -16,7 +16,7 @@ struct contours {
 
 class ImageRecognitionController {
 public:
-    static cones findConeCoordinates(const cv::Mat& image);
+    static cones findConeCoordinates(const cv::Mat& image, cv::Scalar lo, cv::Scalar hi);
     static contours testingContourDrawing(const cv::Mat& image);
 
 };

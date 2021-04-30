@@ -17,8 +17,7 @@
 
 // Include the single-file, header-only middleware libcluon to create high-performance microservices
 #include "cluon-complete.hpp"
-// Include the OpenDLV Standard Message Set that contains messages
-// that are usually exchanged for automotive or robotic applications
+// Include the OpenDLV Standard Message Set that contains messages that are usually exchanged for automotive or robotic applications 
 #include "opendlv-standard-message-set.hpp"
 
 // Include the GUI and image processing header files from OpenCV
@@ -80,18 +79,18 @@ int32_t main(int32_t argc, char **argv) {
             int frameCounter = 0;
 
             cv::namedWindow("Inspector", cv::WINDOW_AUTOSIZE);
-            int minH{10};
-            int maxH{90};
-            cv::createTrackbar("Hue (min)", "Inspector", &minH, 179);
-            cv::createTrackbar("Hue (max)", "Inspector", &maxH, 179);
+            int minH{90};
+            int maxH{145};
+            cv::createTrackbar("Hue (min)", "Inspector", &minH, 255);
+            cv::createTrackbar("Hue (max)", "Inspector", &maxH, 255);
 
-            int minS{100};
+            int minS{170};
             int maxS{255};
             cv::createTrackbar("Sat (min)", "Inspector", &minS, 255);
             cv::createTrackbar("Sat (max)", "Inspector", &maxS, 255);
 
-            int minV{121};
-            int maxV{255};
+            int minV{50};
+            int maxV{100};
             cv::createTrackbar("Val (min)", "Inspector", &minV, 255);
             cv::createTrackbar("Val (max)", "Inspector", &maxV, 255);
 
@@ -114,8 +113,8 @@ int32_t main(int32_t argc, char **argv) {
                 sharedMemory->unlock();
 
                 // TODO: Do something with the frame.
+                cones foundCones = ImageRecognitionController::findConeCoordinates(img, cv::Scalar(minH, minS, minV), cv::Scalar(maxH, maxS, maxV));
 
-                cones foundCones = ImageRecognitionController::findConeCoordinates(img);
                 double steeringAngle = SteeringAngleCalculator::calculateSteeringAngle(foundCones);
 
                 if(steeringAngle < 2){
@@ -123,45 +122,30 @@ int32_t main(int32_t argc, char **argv) {
                     std::cout << "Valid frames: " << frameCounter;
                 }
 
-                /*foundCones.yellow.first.y = foundCones.yellow.first.y+240;
+                foundCones.yellow.first.y = foundCones.yellow.first.y+240;
                 foundCones.yellow.second.y = foundCones.yellow.second.y+240;
                 cv::circle(img, foundCones.yellow.first, 3, cv::Scalar(0,0,255), 2);
                 cv::circle(img, foundCones.yellow.second, 3, cv::Scalar(0,0,255), 2);
-                cv::line(img, foundCones.yellow.first, foundCones.yellow.second, cv::Scalar(0,0,255), 2);*/
+                cv::line(img, foundCones.yellow.first, foundCones.yellow.second, cv::Scalar(0,0,255), 2);
 
-                foundCones.blue.first.y = foundCones.blue.first.y;
-                foundCones.blue.second.y = foundCones.blue.second.y;
-                cv::circle(img, foundCones.blue.first, 3,
-                           cv::Scalar(255,255,255), 2);
-                cv::circle(img, foundCones.blue.second, 3,
-                           cv::Scalar(255,255,255), 2);
-                cv::line(img, foundCones.blue.first, foundCones.blue.second,
-                         cv::Scalar(255,255,255), 2);
+                foundCones.blue.first.y = foundCones.blue.first.y+240;
+                foundCones.blue.second.y = foundCones.blue.second.y+240;
+                cv::circle(img, foundCones.blue.first, 3, cv::Scalar(0,0,255), 2);
+                cv::circle(img, foundCones.blue.second, 3, cv::Scalar(0,0,255), 2);
+                cv::line(img, foundCones.blue.first, foundCones.blue.second, cv::Scalar(0,0,255), 2);
 
                 cv::putText(img, std::to_string(gsr.groundSteering()), cv::Point(0,50),
-                            cv::FONT_HERSHEY_PLAIN, 1.0,
-                            cv::Scalar(255,255,255), 1, false);
-
+                            cv::FONT_HERSHEY_PLAIN, 1.0, cv::Scalar(255,255,255), 1, false);
                 // If you want to access the latest received ground steering, don't forget to lock the mutex:
 
 
-                cv::Mat testDenoiseImage = ImageProcessor::processImage(img, cv::Scalar(minH, minS, minV),
-                                                                        cv::Scalar(maxH, maxS, maxV));
-                foundCones.blue.first.y = foundCones.blue.first.y;
-                foundCones.blue.second.y = foundCones.blue.second.y;
-                cv::circle(testDenoiseImage, foundCones.blue.first, 3,
-                           cv::Scalar(255,255,255), 2);
-                cv::circle(testDenoiseImage, foundCones.blue.second, 3,
-                           cv::Scalar(255,255,255), 2);
-                cv::line(testDenoiseImage, foundCones.blue.first, foundCones.blue.second,
-                         cv::Scalar(255,255,255), 2);
 
+                cv::Scalar blueLow = cv::Scalar(100, 100, 35); //100, 100, 45
+                cv::Scalar blueHigh = cv::Scalar(150,255,255); //150, 255, 255
+                cv::Scalar yellowLow = cv::Scalar(14, 100, 120);
+                cv::Scalar yellowHigh = cv::Scalar(30,255,255);
+                cv::Mat testDenoiseImage = ImageProcessor::processImage(img, cv::Scalar(minH, minS, minV), cv::Scalar(maxH, maxS, maxV));
 
-                contours contours = ImageRecognitionController::testingContourDrawing(img);
-                cv::drawContours(testDenoiseImage, contours.yellow,
-                                 -1, cv::Scalar(255,255,255), 1);
-                cv::drawContours(testDenoiseImage, contours.blue,
-                                 -1, cv::Scalar(255,255,255), 1);
                 {
                     std::lock_guard<std::mutex> lck(gsrMutex);
                     //std::cout << "main: groundSteering = " << gsr.groundSteering() << std::endl;
@@ -170,7 +154,8 @@ int32_t main(int32_t argc, char **argv) {
 
                 // Display image on your screen.
                 if (VERBOSE) {
-                    cv::imshow(sharedMemory->name().c_str(), testDenoiseImage);
+                    cv::imshow("denoise", testDenoiseImage);
+                    cv::imshow("img", img);
                     cv::waitKey(1);
                 }
                 auto stop = std::chrono::system_clock::now();
