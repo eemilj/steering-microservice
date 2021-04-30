@@ -125,8 +125,8 @@ int32_t main(int32_t argc, char **argv) {
                 realFrameCounter++;
                 std::cout << "Valid frame percentage: " << double(frameCounter)/double(realFrameCounter)*100 << "%" << std::endl;
 
-                cv::Mat russianMat;
-                russianMat = img.clone();
+                cv::Mat counterTest;
+                counterTest = img.clone();
 
                 foundCones.yellow.first.y = foundCones.yellow.first.y+240;
                 foundCones.yellow.second.y = foundCones.yellow.second.y+240;
@@ -153,10 +153,10 @@ int32_t main(int32_t argc, char **argv) {
                 cv::Mat testDenoiseImage = ImageProcessor::processImage(img, cv::Scalar(minH, minS, minV), cv::Scalar(maxH, maxS, maxV));
 
                 contours contours;
-                contours = ImageRecognitionController::testingContourDrawing(russianMat);
-                russianMat = testDenoiseImage.clone();
-                cv::drawContours(russianMat, contours.blue, -1, cv::Scalar(255,255,255), 1);
-                cv::drawContours(russianMat, contours.yellow, -1, cv::Scalar(255,255,255), 1);
+                contours = ImageRecognitionController::testingContourDrawing(counterTest);
+                counterTest = testDenoiseImage.clone();
+                cv::drawContours(counterTest, contours.blue, -1, cv::Scalar(255,255,255), 1);
+                cv::drawContours(counterTest, contours.yellow, -1, cv::Scalar(255,255,255), 1);
                 {
                     std::lock_guard<std::mutex> lck(gsrMutex);
                     //std::cout << "main: groundSteering = " << gsr.groundSteering() << std::endl;
@@ -167,7 +167,7 @@ int32_t main(int32_t argc, char **argv) {
                 if (VERBOSE) {
                     cv::imshow("denoise", testDenoiseImage);
                     cv::imshow("img", img);
-                    cv::imshow("ruski", russianMat);
+                    cv::imshow("contoursDraw", contourTest);
                     cv::waitKey(1);
                 }
                 auto stop = std::chrono::system_clock::now();
