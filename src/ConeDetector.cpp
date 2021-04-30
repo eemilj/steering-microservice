@@ -1,4 +1,6 @@
 #include "ConeDetector.h"
+#include <iostream>
+
 
 bool compareContourAreas (std::vector<cv::Point> contour1, std::vector<cv::Point> contour2) {
     double i = fabs( contourArea(cv::Mat(contour1)) );
@@ -18,17 +20,15 @@ cv::Point pointFinder(cv::Moments moment) {
 
 std::pair<cv::Point, cv::Point> ConeDetector::findCenterCoordinate(const cv::Mat& image) {
     //cv::Rect boundingRectangle;
-    std::vector<cv::Vec4i> elementsHierarchy;
+    //std::vector<cv::Vec4i> elementsHierarchy;
     std::vector<std::vector<cv::Point>> contours;
     std::pair<cv::Point, cv::Point> foundPoints;
     foundPoints.first = cv::Point(0,0);
     foundPoints.second = cv::Point(0,0);
 
-    cv::Canny(image, image, 50, 200);
-
-    cv::findContours(image, contours, elementsHierarchy, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_NONE);
-    //sort the thing for reasons unknown
+    contours = detectContours(image);
     if(!contours.empty()) {
+        //sort the thing for reasons unknown
         std::sort(contours.begin(), contours.end(), compareContourAreas);
         cv::Moments largest = cv::moments(contours[0]);
         if(contours.size() > 1) {
@@ -38,4 +38,31 @@ std::pair<cv::Point, cv::Point> ConeDetector::findCenterCoordinate(const cv::Mat
         foundPoints.first = pointFinder(largest);
     }
     return foundPoints;
+}
+
+std::vector<std::vector<cv::Point>> ConeDetector::detectContours(const cv::Mat &image) {
+    cv::Mat output;
+    std::vector<std::vector<cv::Point>> contours, approximatedContours, convexHulls, convexHulls3_10;
+    std::vector<cv::Point> approximatedContour, convexHull, convexHull3_10;
+    cv::Canny(image, output, 80, 160);
+    cv::findContours(output, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
+
+    for(auto &contour : contours) {
+        cv::approxPolyDP(contour, approximatedContour, 10, true);
+        approximatedContours.push_back(approximatedContour);
+    }
+
+    for(auto &contour : contours) {
+        cv::convexHull(contour, convexHull);
+        convexHulls.push_back(convexHull);
+    }
+
+    for(auto & i : convexHulls) {
+        if(i.size() >= 3 && i.size() <= 10) {
+            cv::convexHull(i, convexHull3_10);
+            convexHulls3_10.push_back(convexHull3_10);
+        }
+    }
+
+    return convexHulls;
 }

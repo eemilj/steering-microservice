@@ -11,6 +11,7 @@ public:
     static cv::Mat cropImage(const cv::Mat& image, int width, int height);
     static cv::Mat filterImage(const cv::Mat& image, const cv::Scalar& hi, const cv::Scalar& lo);
     static cv::Mat denoiseImage(const cv::Mat& image);
+    static cv::Mat bilateralFiltering(const cv::Mat& image);
 };
 
 

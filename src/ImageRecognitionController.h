@@ -8,10 +8,16 @@ struct cones {
     std::pair<cv::Point, cv::Point> blue = {};
     std::pair<cv::Point, cv::Point> yellow = {};
 };
+//This can be deleted when the testing is done.
+struct contours {
+    std::vector<std::vector<cv::Point>> blue = {};
+    std::vector<std::vector<cv::Point>> yellow = {};
+};
 
 class ImageRecognitionController {
 public:
     static cones findConeCoordinates(const cv::Mat& image);
+    static contours testingContourDrawing(const cv::Mat& image);
 
 };
 

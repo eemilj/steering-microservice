@@ -8,6 +8,7 @@
 class ConeDetector {
 public:
     static std::pair<cv::Point, cv::Point> findCenterCoordinate(const cv::Mat& image);
+    static std::vector<std::vector<cv::Point>> detectContours(const cv::Mat& image);
 
 };
 
