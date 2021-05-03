@@ -64,5 +64,5 @@ std::vector<std::vector<cv::Point>> ConeDetector::detectContours(const cv::Mat &
         }
     }
 
-    return convexHulls;
+    return convexHulls3_10;
 }
