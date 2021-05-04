@@ -19,8 +19,7 @@ cv::Point pointFinder(cv::Moments moment) {
 }
 
 std::pair<cv::Point, cv::Point> ConeDetector::findCenterCoordinate(const cv::Mat& image) {
-    //cv::Rect boundingRectangle;
-    //std::vector<cv::Vec4i> elementsHierarchy;
+
     std::vector<std::vector<cv::Point>> contours;
     std::pair<cv::Point, cv::Point> foundPoints;
     foundPoints.first = cv::Point(0,0);
@@ -28,7 +27,7 @@ std::pair<cv::Point, cv::Point> ConeDetector::findCenterCoordinate(const cv::Mat
 
     contours = detectContours(image);
     if(!contours.empty()) {
-        //sort the thing for reasons unknown
+        //sort in order to be able to get the largest and second largest cones
         std::sort(contours.begin(), contours.end(), compareContourAreas);
         cv::Moments largest = cv::moments(contours[0]);
         if(contours.size() > 1) {
@@ -47,6 +46,7 @@ std::vector<std::vector<cv::Point>> ConeDetector::detectContours(const cv::Mat &
     cv::Canny(image, output, 80, 160);
     cv::findContours(output, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
 
+    // TODO check if first and third loops are needed
     for(auto &contour : contours) {
         cv::approxPolyDP(contour, approximatedContour, 10, true);
         approximatedContours.push_back(approximatedContour);
@@ -64,5 +64,5 @@ std::vector<std::vector<cv::Point>> ConeDetector::detectContours(const cv::Mat &
         }
     }
 
-    return convexHulls3_10;
+    return convexHulls;
 }

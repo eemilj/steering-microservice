@@ -26,8 +26,8 @@
 
 #include "ImageRecognitionController.h"
 #include "SteeringAngleCalculator.h"
-#include "ImageProcessor.h"
 #include <chrono>
+#include "ConeVisualizer.h"
 
 int32_t main(int32_t argc, char **argv) {
     int32_t retCode{1};
@@ -79,22 +79,6 @@ int32_t main(int32_t argc, char **argv) {
             int frameCounter = 0;
             int realFrameCounter = 0;
 
-            cv::namedWindow("Inspector", cv::WINDOW_AUTOSIZE);
-            int minH{110};
-            int maxH{130};
-            cv::createTrackbar("Hue (min)", "Inspector", &minH, 255);
-            cv::createTrackbar("Hue (max)", "Inspector", &maxH, 255);
-
-            int minS{140};
-            int maxS{255};
-            cv::createTrackbar("Sat (min)", "Inspector", &minS, 255);
-            cv::createTrackbar("Sat (max)", "Inspector", &maxS, 255);
-
-            int minV{50};
-            int maxV{100};
-            cv::createTrackbar("Val (min)", "Inspector", &minV, 255);
-            cv::createTrackbar("Val (max)", "Inspector", &maxV, 255);
-
             while (od4.isRunning()) {
                 auto start = std::chrono::system_clock::now();
                 // OpenCV data structure to hold an image.
@@ -110,11 +94,10 @@ int32_t main(int32_t argc, char **argv) {
                     cv::Mat wrapped(HEIGHT, WIDTH, CV_8UC4, sharedMemory->data());
                     img = wrapped.clone();
                 }
-                // TODO: Here, you can add some code to check the sampleTimePoint when the current frame was captured.
+
                 sharedMemory->unlock();
 
-                // TODO: Do something with the frame.
-                cones foundCones = ImageRecognitionController::findConeCoordinates(img, cv::Scalar(minH, minS, minV), cv::Scalar(maxH, maxS, maxV));
+                cones foundCones = ImageRecognitionController::findConeCoordinates(img);
 
                 double steeringAngle = SteeringAngleCalculator::calculateSteeringAngle(foundCones);
 
@@ -124,50 +107,17 @@ int32_t main(int32_t argc, char **argv) {
                 }
                 realFrameCounter++;
                 std::cout << "Valid frame percentage: " << double(frameCounter)/double(realFrameCounter)*100 << "%" << std::endl;
-
-                cv::Mat contourTest;
-                contourTest = img.clone();
-
-                foundCones.yellow.first.y = foundCones.yellow.first.y+240;
-                foundCones.yellow.second.y = foundCones.yellow.second.y+240;
-                cv::circle(img, foundCones.yellow.first, 3, cv::Scalar(0,0,255), 2);
-                cv::circle(img, foundCones.yellow.second, 3, cv::Scalar(0,0,255), 2);
-                cv::line(img, foundCones.yellow.first, foundCones.yellow.second, cv::Scalar(0,0,255), 2);
-
-                foundCones.blue.first.y = foundCones.blue.first.y+240;
-                foundCones.blue.second.y = foundCones.blue.second.y+240;
-                cv::circle(img, foundCones.blue.first, 3, cv::Scalar(0,0,255), 2);
-                cv::circle(img, foundCones.blue.second, 3, cv::Scalar(0,0,255), 2);
-                cv::line(img, foundCones.blue.first, foundCones.blue.second, cv::Scalar(0,0,255), 2);
-
-                cv::putText(img, std::to_string(gsr.groundSteering()), cv::Point(0,50),
-                            cv::FONT_HERSHEY_PLAIN, 1.0, cv::Scalar(255,255,255), 1, false);
-                // If you want to access the latest received ground steering, don't forget to lock the mutex:
-
-
-
-                cv::Scalar blueLow = cv::Scalar(100, 100, 35); //100, 100, 45
-                cv::Scalar blueHigh = cv::Scalar(150,255,255); //150, 255, 255
-                cv::Scalar yellowLow = cv::Scalar(14, 100, 120);
-                cv::Scalar yellowHigh = cv::Scalar(30,255,255);
-                cv::Mat testDenoiseImage = ImageProcessor::processImage(img, cv::Scalar(minH, minS, minV), cv::Scalar(maxH, maxS, maxV));
-
-                contours contours;
-                contours = ImageRecognitionController::testingContourDrawing(contourTest);
-                contourTest = testDenoiseImage.clone();
-                cv::drawContours(contourTest, contours.blue, -1, cv::Scalar(255,255,255), 1);
-                cv::drawContours(contourTest, contours.yellow, -1, cv::Scalar(255,255,255), 1);
+                cv::Mat contoursImage;
+                contoursImage = ConeVisualizer::drawContoursImage(img);
                 {
                     std::lock_guard<std::mutex> lck(gsrMutex);
-                    //std::cout << "main: groundSteering = " << gsr.groundSteering() << std::endl;
-
+                    std::cout << "main: groundSteering = " << gsr.groundSteering() << std::endl;
                 }
 
                 // Display image on your screen.
                 if (VERBOSE) {
-                    cv::imshow("denoise", testDenoiseImage);
                     cv::imshow("img", img);
-                    cv::imshow("contoursDraw", contourTest);
+                    cv::imshow("contours", contoursImage);
                     cv::waitKey(1);
                 }
                 auto stop = std::chrono::system_clock::now();
