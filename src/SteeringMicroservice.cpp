@@ -73,16 +73,30 @@ int32_t main(int32_t argc, char **argv) {
                 //std::cout << "lambda: groundSteering = " << gsr.groundSteering() << std::endl;
             };
 
+            opendlv::proxy::DistanceReading dsr;
+            std::mutex dsrMutex;
+            auto onDistanceReadingRequest = [&dsr, &dsrMutex](cluon::data::Envelope &&env){
+                // The envelope data structure provide further details, such as sampleTimePoint as shown in this test case:
+                // https://github.com/chrberger/libcluon/blob/master/libcluon/testsuites/TestEnvelopeConverter.cpp#L31-L40
+                std::lock_guard<std::mutex> lck(dsrMutex);
+                if(env.senderStamp() == 0) {
+                    dsr = cluon::extractMessage<opendlv::proxy::DistanceReading>(std::move(env));
+                }
+            };
+
             od4.dataTrigger(opendlv::proxy::GroundSteeringRequest::ID(), onGroundSteeringRequest);
+            od4.dataTrigger(opendlv::proxy::DistanceReading::ID(), onDistanceReadingRequest);
+
 
             // Endless loop; end the program by pressing Ctrl-C.
             int frameCounter = 0;
             int realFrameCounter = 0;
+            cv::Mat img, processedImg;
+            double distanceReading;
 
             while (od4.isRunning()) {
                 auto start = std::chrono::system_clock::now();
                 // OpenCV data structure to hold an image.
-                cv::Mat img, processedImg;
 
                 // Wait for a notification of a new frame.
                 sharedMemory->wait();
@@ -93,13 +107,14 @@ int32_t main(int32_t argc, char **argv) {
                     // Copy the pixels from the shared memory into our own data structure.
                     cv::Mat wrapped(HEIGHT, WIDTH, CV_8UC4, sharedMemory->data());
                     img = wrapped.clone();
+                    std::lock_guard<std::mutex> lck(dsrMutex);
+                    distanceReading = dsr.distance();
                 }
-
+                std::cout << distanceReading << std::endl;
                 sharedMemory->unlock();
-
                 cones foundCones = ImageRecognitionController::findConeCoordinates(img);
 
-                double steeringAngle = SteeringAngleCalculator::calculateSteeringAngle(foundCones);
+                double steeringAngle = SteeringAngleCalculator::calculateSteeringAngle(foundCones, distanceReading);
 
                 if(steeringAngle < 2){
                     frameCounter++;
@@ -113,7 +128,6 @@ int32_t main(int32_t argc, char **argv) {
                     std::lock_guard<std::mutex> lck(gsrMutex);
                     std::cout << "main: groundSteering = " << gsr.groundSteering() << std::endl;
                 }
-
                 // Display image on your screen.
                 if (VERBOSE) {
                     cv::imshow("img", img);

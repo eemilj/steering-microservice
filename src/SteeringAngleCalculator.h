@@ -6,7 +6,8 @@
 #include "ImageRecognitionController.h"
 class SteeringAngleCalculator {
 public:
-    static double calculateSteeringAngle(cones foundCones);
+    static double calculateSteeringAngle(cones foundCones, double distanceReading);
+    static double findConeAngle(std::pair<cv::Point, cv::Point> cone);
 };
 
 
