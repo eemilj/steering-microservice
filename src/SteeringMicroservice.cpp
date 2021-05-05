@@ -92,7 +92,7 @@ int32_t main(int32_t argc, char **argv) {
             int frameCounter = 0;
             int realFrameCounter = 0;
             cv::Mat img, processedImg;
-            double distanceReading;
+            double distanceReading, lastSteeringAngle = 0, upperBound = 0, lowerBound = 0;
 
             while (od4.isRunning()) {
                 auto start = std::chrono::system_clock::now();
@@ -110,24 +110,40 @@ int32_t main(int32_t argc, char **argv) {
                     std::lock_guard<std::mutex> lck(dsrMutex);
                     distanceReading = dsr.distance();
                 }
-                std::cout << distanceReading << std::endl;
+                //std::cout << distanceReading << std::endl;
                 sharedMemory->unlock();
                 cones foundCones = ImageRecognitionController::findConeCoordinates(img);
 
-                double steeringAngle = SteeringAngleCalculator::calculateSteeringAngle(foundCones, distanceReading);
+                double steeringAngle = SteeringAngleCalculator::outputSteeringAngle(lastSteeringAngle, foundCones, distanceReading);
+                lastSteeringAngle = steeringAngle;
+                std::cout << "Our gsr: " << steeringAngle << std::endl;
 
-                if(steeringAngle < 2){
-                    frameCounter++;
-                    std::cout << "Valid frames: " << frameCounter << std::endl;
-                }
+//                if(steeringAngle != 0 && steeringAngle < 361){
+//                    frameCounter++;
+//                    //std::cout << "Valid frames: " << frameCounter << std::endl;
+//                }
                 realFrameCounter++;
-                std::cout << "Valid frame percentage: " << double(frameCounter)/double(realFrameCounter)*100 << "%" << std::endl;
+                //std::cout << "Valid frame percentage: " << double(frameCounter)/double(realFrameCounter)*100 << "%" << std::endl;
                 cv::Mat contoursImage;
                 contoursImage = ConeVisualizer::drawContoursImage(img);
                 {
                     std::lock_guard<std::mutex> lck(gsrMutex);
                     std::cout << "main: groundSteering = " << gsr.groundSteering() << std::endl;
+                    upperBound = gsr.groundSteering() + 0.5*gsr.groundSteering();
+                    lowerBound = gsr.groundSteering() - 0.5*gsr.groundSteering();
+
+                    if(gsr.groundSteering() > 0 && (steeringAngle >= lowerBound) && (steeringAngle <= upperBound)){
+                        frameCounter++;
+                    } else if (gsr.groundSteering() < 0 && (steeringAngle <= lowerBound) && (steeringAngle >= upperBound)){
+                        frameCounter++;
+                    } else if (fabs(gsr.groundSteering()) == 0.0){
+                        if (steeringAngle <= 0.05 && steeringAngle >= -0.05) {
+                            frameCounter++;
+                        }
+                    }
                 }
+                std::cout << "Valid frame percentage: " << double(frameCounter)/double(realFrameCounter)*100 << "%" << std::endl;
+
                 // Display image on your screen.
                 if (VERBOSE) {
                     cv::imshow("img", img);
@@ -136,9 +152,9 @@ int32_t main(int32_t argc, char **argv) {
                 }
                 auto stop = std::chrono::system_clock::now();
                 auto end = stop - start;
-                std::cout  << " Process time: "
+                /*std::cout  << " Process time: "
                            << std::chrono::duration_cast<std::chrono::milliseconds>(end).count()
-                           << " ms. " << std::endl;
+                           << " ms. " << std::endl;*/
             }
         }
         retCode = 0;

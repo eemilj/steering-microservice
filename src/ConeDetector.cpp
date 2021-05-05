@@ -21,6 +21,7 @@ cv::Point pointFinder(cv::Moments moment) {
 std::pair<cv::Point, cv::Point> ConeDetector::findCenterCoordinate(const cv::Mat& image) {
 
     std::vector<std::vector<cv::Point>> contours;
+    cv::Rect rect;
     std::pair<cv::Point, cv::Point> foundPoints;
     foundPoints.first = cv::Point(0,0);
     foundPoints.second = cv::Point(0,0);
@@ -29,12 +30,18 @@ std::pair<cv::Point, cv::Point> ConeDetector::findCenterCoordinate(const cv::Mat
     if(!contours.empty()) {
         //sort in order to be able to get the largest and second largest cones
         std::sort(contours.begin(), contours.end(), compareContourAreas);
-        cv::Moments largest = cv::moments(contours[0]);
+        rect = cv::boundingRect(contours[0]);
+        foundPoints.first.x = rect.x + rect.width/2;
+        foundPoints.first.y = rect.y + rect.width/2;
+        //cv::Moments largest = cv::moments(contours[0]);
         if(contours.size() > 1) {
-            cv::Moments secondLargest = cv::moments(contours[1]);
-            foundPoints.second = pointFinder(secondLargest);
+            rect = cv::boundingRect(contours[1]);
+            foundPoints.second.x = rect.x + rect.width/2;
+            foundPoints.second.y = rect.y + rect.width/2;
+            //cv::Moments secondLargest = cv::moments(contours[1]);
+            //foundPoints.second = pointFinder(secondLargest);
         }
-        foundPoints.first = pointFinder(largest);
+        //foundPoints.first = pointFinder(largest);
     }
     return foundPoints;
 }
@@ -43,6 +50,7 @@ std::vector<std::vector<cv::Point>> ConeDetector::detectContours(const cv::Mat &
     cv::Mat output;
     std::vector<std::vector<cv::Point>> contours, approximatedContours, convexHulls, convexHulls3_10;
     std::vector<cv::Point> approximatedContour, convexHull, convexHull3_10;
+    std::vector<cv::Rect> rect;
     cv::Canny(image, output, 80, 160);
     cv::findContours(output, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
 
