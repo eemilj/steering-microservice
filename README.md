@@ -46,7 +46,10 @@ docker run --rm <name>
 
 ## Top Level Architecture Overview
 
-![Top Level Component Diagram](./diagrams/top-level-component-diagram-v1.png "Top Level Component Diagram")
+![Architectural Overview Diagram](./diagrams/architectural-diagram.png "Architectural Diagram")
+
+## Steering Microservice Component Diagram
+![SteeringMicroservice Component Diagram](./diagrams/component-diagram.png "SteeringMicroservice Component Diagram")
 
 
 # Team’s workflow
