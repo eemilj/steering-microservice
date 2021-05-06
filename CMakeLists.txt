@@ -82,12 +82,12 @@ add_executable(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/src/${PROJECT_NAME}.c
         src/ImageProcessor.cpp src/ConeDetector.cpp
         src/ConeDetector.h src/ImageRecognitionController.cpp src/ImageRecognitionController.h
         src/SteeringAngleCalculator.cpp src/SteeringAngleCalculator.h
-        src/ConeVisualizer.cpp src/ConeVisualizer.h)
+        src/ConeVisualizer.cpp src/ConeVisualizer.h src/IOCSVProducer.cpp src/IOCSVProducer.h)
 add_executable(${PROJECT_NAME}-Runner
         ${CMAKE_CURRENT_SOURCE_DIR}/test/ImageProcessorTester.cpp
         src/ImageProcessor.cpp src/ConeDetector.cpp src/ImageRecognitionController.cpp
         src/SteeringAngleCalculator.cpp src/SteeringAngleCalculator.h
-        test/ConeDetectorTester.cpp)
+        test/ConeDetectorTester.cpp src/IOCSVProducer.cpp src/IOCSVProducer.h)
 target_link_libraries(${PROJECT_NAME} ${LIBRARIES})
 target_link_libraries(${PROJECT_NAME}-Runner ${LIBRARIES})
 
