@@ -2,8 +2,6 @@
 #include <cmath>
 #include <iostream>
 
-const int INVALID_ANGLE = 361;
-
 double angle(const cv::Point& vector1, const cv::Point& vector2) {
     double cosAngle = vector1.dot(vector2) / (cv::norm(vector1) * cv::norm(vector2));
     if (cosAngle > 1.0) {
@@ -15,7 +13,7 @@ double angle(const cv::Point& vector1, const cv::Point& vector2) {
     return std::acos(cosAngle)/CV_PI*180;
 }
 
-double SteeringAngleCalculator::outputSteeringAngle(double lastSteeringAngle, cones foundCones, double distanceReading){
+double SteeringAngleCalculator::outputSteeringAngle(double lastSteeringAngle, const cones& foundCones, double distanceReading){
     double calculatedSteeringAngle = calculateSteeringAngle(foundCones);
     double steeringAngle;
 
@@ -35,7 +33,7 @@ double SteeringAngleCalculator::outputSteeringAngle(double lastSteeringAngle, co
     return steeringAngle;
 }
 
-double SteeringAngleCalculator::calculateSteeringAngle(cones foundCones) {
+double SteeringAngleCalculator::calculateSteeringAngle(const cones& foundCones) {
     double blueConeAngle, yellowConeAngle;
 
     blueConeAngle = findConeAngle(foundCones.blue);
@@ -58,12 +56,12 @@ double SteeringAngleCalculator::calculateSteeringAngle(cones foundCones) {
     return blueConeAngle;
 }
 
-double SteeringAngleCalculator::findConeAngle(std::pair<cv::Point, cv::Point> cone){
+double SteeringAngleCalculator::findConeAngle(const std::pair<cv::Point, cv::Point>& cones){
     double coneAngle;
     cv::Point vector1, vector2;
-    if( !(  (cone.first.x == 0 && cone.first.y == 0) ||
-            (cone.second.x == 0 && cone.second.y == 0))) {
-        vector1 ={cone.second.x - cone.first.x, cone.second.y - cone.first.y};
+    if( !(  (cones.first.x == 0 && cones.first.y == 0) ||
+            (cones.second.x == 0 && cones.second.y == 0))) {
+        vector1 ={cones.second.x - cones.first.x, cones.second.y - cones.first.y};
         vector2 = {1,0};
         coneAngle = angle(vector1, vector2);
     }else {
