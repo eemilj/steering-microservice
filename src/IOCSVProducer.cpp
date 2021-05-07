@@ -13,17 +13,29 @@ void IOCSVProducer::exportDataToCsv(cluon::data::TimeStamp timeStamp, double act
     }
 }
 
-std::ofstream IOCSVProducer::openCsvFile(){
+std::ofstream IOCSVProducer::openCsvFile(const char* fileName){
     const char columnSeparator = ',';
     std::ofstream csvFile;
     csvFile.exceptions ( std::ofstream::failbit | std::ofstream::badbit );
     try {
-        csvFile.open ("csvOutput.csv", std::ios::app);
+        if (fileExists(fileName)) {
+            remove(fileName);
+        }
+        csvFile.open (fileName, std::ios::app);
         csvFile << "Timestamp" << columnSeparator << "ActualGroundSteering" << columnSeparator << "CalculatedSteeringAngle" << std::endl;
     }catch (std::ofstream::failure& e) {
-        std::cerr << "Exception opening file" << e.code() << " & " << e.what() << std::endl;
+        std::cerr << "Exception opening file: " << e.code() << " & " << e.what() << std::endl;
     }
     return csvFile;
+}
+
+// https://stackoverflow.com/questions/4316442/stdofstream-check-if-file-exists-before-writing
+bool IOCSVProducer::fileExists(const std::string& filename) {
+    struct stat buf = {};
+    if (stat(filename.c_str(), &buf) != -1) {
+        return true;
+    }
+    return false;
 }
 
 void IOCSVProducer::closeCsvFile(std::ofstream &csvFile){
