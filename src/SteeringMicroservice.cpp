@@ -95,7 +95,7 @@ int32_t main(int32_t argc, char **argv) {
             cluon::data::TimeStamp timeStamp;
             cv::Mat img, processedImg;
             double distanceReading, lastSteeringAngle = 0, upperBound = 0, lowerBound = 0;
-            std::ofstream csvFile = IOCSVProducer::openCsvFile("csvOutput.csv");
+            std::fstream csvFile = IOCSVProducer::openCsvFile("csvOutput.csv");
 
             while (od4.isRunning()) {
                 auto start = std::chrono::system_clock::now();
@@ -145,7 +145,7 @@ int32_t main(int32_t argc, char **argv) {
                         }
                     }
 
-                    IOCSVProducer::exportDataToCsv(timeStamp, gsr.groundSteering(), steeringAngle, csvFile);
+                    IOCSVProducer::writeToCsv(timeStamp, gsr.groundSteering(), steeringAngle, csvFile);
                 }
                 std::cout << "Valid frame percentage: " << double(frameCounter)/double(realFrameCounter)*100 << "%" << std::endl;
 

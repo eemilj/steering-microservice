@@ -8,9 +8,9 @@
 
 class IOCSVProducer {
 public:
-    static void exportDataToCsv(cluon::data::TimeStamp timeStamp, double actualGroundSteering, double calculatedSteeringAngle, std::ofstream &csvFile);
-    static std::ofstream openCsvFile(const char* fileName);
-    static void closeCsvFile(std::ofstream &csvFile);
+    static void writeToCsv(cluon::data::TimeStamp timeStamp, double actualGroundSteering, double calculatedSteeringAngle, std::fstream &csvFile);
+    static std::fstream openCsvFile(const char* fileName);
+    static bool closeCsvFile(std::fstream &csvFile);
     static bool fileExists(const std::string& filename);
 };
 
