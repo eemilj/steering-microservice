@@ -8,7 +8,7 @@
 
 class ConeVisualizer {
 public:
-    static cv::Mat drawContoursImage(cv::Mat &image, const cones& foundCones);
+    static cv::Mat createDebugImage(cv::Mat &image, const cones &foundCones, cluon::data::TimeStamp timeStamp, double steeringAngle);
 };
 
 

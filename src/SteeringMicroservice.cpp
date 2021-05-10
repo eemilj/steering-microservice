@@ -127,8 +127,6 @@ int32_t main(int32_t argc, char **argv) {
 //                }
                 realFrameCounter++;
                 //std::cout << "Valid frame percentage: " << double(frameCounter)/double(realFrameCounter)*100 << "%" << std::endl;
-                cv::Mat contoursImage;
-                contoursImage = ConeVisualizer::drawContoursImage(img, foundCones);
                 {
                     std::lock_guard<std::mutex> lck(gsrMutex);
                     std::cout << "main: groundSteering = " << gsr.groundSteering() << std::endl;
@@ -146,14 +144,15 @@ int32_t main(int32_t argc, char **argv) {
                     }
 
                     IOHandler::writeToCsv(timeStamp, gsr.groundSteering(), steeringAngle, csvFile);
-                    IOHandler::printToTerminal(timeStamp,steeringAngle);
+                    IOHandler::printToTerminal(timeStamp, steeringAngle);
                 }
                 std::cout << "Valid frame percentage: " << double(frameCounter)/double(realFrameCounter)*100 << "%" << std::endl;
 
                 // Display image on your screen.
                 if (VERBOSE) {
-                    cv::imshow("img", img);
-                    cv::imshow("contours", contoursImage);
+                    cv::Mat rectangleImage;
+                    rectangleImage = ConeVisualizer::createDebugImage(img, foundCones, timeStamp, steeringAngle);
+                    cv::imshow("debug", rectangleImage);
                     cv::waitKey(1);
                 }
                 auto stop = std::chrono::system_clock::now();
