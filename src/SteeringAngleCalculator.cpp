@@ -50,18 +50,18 @@ double SteeringAngleCalculator::calculateSteeringAngle(const cones& foundCones) 
         return blueConeAngle;
     }
 
-    if ((foundCones.yellow.second.x-320) < (320 - foundCones.blue.second.x)){
+    if (abs(foundCones.yellow.second.position.x-320) < abs(320 - foundCones.blue.second.position.x)){
         return yellowConeAngle;
     }
     return blueConeAngle;
 }
 
-double SteeringAngleCalculator::findConeAngle(const std::pair<cv::Point, cv::Point>& cones){
+double SteeringAngleCalculator::findConeAngle(const std::pair<cone, cone>& cones){
     double coneAngle;
     cv::Point vector1, vector2;
-    if( !(  (cones.first.x == 0 && cones.first.y == 0) ||
-            (cones.second.x == 0 && cones.second.y == 0))) {
-        vector1 ={cones.second.x - cones.first.x, cones.second.y - cones.first.y};
+    if( !(  (cones.first.position.x == 0 && cones.first.position.y == 0) ||
+            (cones.second.position.x == 0 && cones.second.position.y == 0))) {
+        vector1 ={cones.second.position.x - cones.first.position.x, cones.second.position.y - cones.first.position.y};
         vector2 = {1,0};
         coneAngle = angle(vector1, vector2);
     }else {

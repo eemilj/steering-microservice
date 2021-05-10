@@ -8,7 +8,7 @@
 class SteeringAngleCalculator {
 public:
     static double calculateSteeringAngle(const cones& foundCones);
-    static double findConeAngle(const std::pair<cv::Point, cv::Point>& cones);
+    static double findConeAngle(const std::pair<cone, cone>& cones);
     static double outputSteeringAngle(double lastSteeringAngle, const cones& foundCones, double distanceReading);
 };
 

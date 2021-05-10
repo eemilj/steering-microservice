@@ -2,48 +2,32 @@
 #include <iostream>
 
 
-bool compareContourAreas (std::vector<cv::Point> contour1, std::vector<cv::Point> contour2) {
+bool compareContourAreas (const std::vector<cv::Point>& contour1, const std::vector<cv::Point>& contour2) {
     double i = fabs( contourArea(cv::Mat(contour1)) );
     double j = fabs( contourArea(cv::Mat(contour2)) );
     return ( i > j );
 }
 
-cv::Point pointFinder(cv::Moments moment) {
-    int centerX, centerY;
-    centerX = int(moment.m10 / moment.m00);
-    centerY = int(moment.m01 / moment.m00);
-    cv::Point foundPoint;
-    foundPoint.x = centerX;
-    foundPoint.y = centerY;
-    return foundPoint;
-}
-
-std::pair<cv::Point, cv::Point> ConeDetector::findCenterCoordinate(const cv::Mat& image) {
+std::pair<cone, cone> ConeDetector::findCenterCoordinate(const cv::Mat& image) {
 
     std::vector<std::vector<cv::Point>> contours;
-    cv::Rect rect;
-    std::pair<cv::Point, cv::Point> foundPoints;
-    foundPoints.first = cv::Point(0,0);
-    foundPoints.second = cv::Point(0,0);
+    std::pair<cone, cone> foundCones;
+    foundCones.first.position = cv::Point(0,0);
+    foundCones.second.position = cv::Point(0,0);
 
     contours = detectContours(image);
     if(!contours.empty()) {
-        //sort in order to be able to get the largest and second largest cones
         std::sort(contours.begin(), contours.end(), compareContourAreas);
-        rect = cv::boundingRect(contours[0]);
-        foundPoints.first.x = rect.x + rect.width/2;
-        foundPoints.first.y = rect.y + rect.width/2;
-        //cv::Moments largest = cv::moments(contours[0]);
+        foundCones.first.boundingRectangle = cv::boundingRect(contours[0]);
+        foundCones.first.position.x = foundCones.first.boundingRectangle.x + foundCones.first.boundingRectangle.width/2;
+        foundCones.first.position.y = foundCones.first.boundingRectangle.y + foundCones.first.boundingRectangle.width/2;
         if(contours.size() > 1) {
-            rect = cv::boundingRect(contours[1]);
-            foundPoints.second.x = rect.x + rect.width/2;
-            foundPoints.second.y = rect.y + rect.width/2;
-            //cv::Moments secondLargest = cv::moments(contours[1]);
-            //foundPoints.second = pointFinder(secondLargest);
+            foundCones.second.boundingRectangle = cv::boundingRect(contours[1]);
+            foundCones.second.position.x = foundCones.first.boundingRectangle.x + foundCones.first.boundingRectangle.width/2;
+            foundCones.second.position.y = foundCones.first.boundingRectangle.y + foundCones.first.boundingRectangle.width/2;
         }
-        //foundPoints.first = pointFinder(largest);
     }
-    return foundPoints;
+    return foundCones;
 }
 
 std::vector<std::vector<cv::Point>> ConeDetector::detectContours(const cv::Mat &image) {
