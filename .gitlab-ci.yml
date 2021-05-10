@@ -66,11 +66,9 @@ release:
   stage: deploy
   before_script:
     - mkdir -p ~/.docker/cli-plugins
-    - cd ~/.docker/cli-plugins
-    - wget https://github.com/docker/buildx/releases/download/v0.5.1/buildx-v0.5.1.linux-amd64
-    - mv buildx-v0.5.1.linux-amd64 docker-buildx
-    - chmod 755 docker-buildx
-    - "echo -e '{\n \"experimental\": \"enabled\"\n}' | tee $HOME/.docker/config.json"
+    - wget -O  ~/.docker/cli-plugins/docker-buildx https://github.com/docker/buildx/releases/download/v0.5.1/buildx-v0.5.1.linux-amd64
+    - chmod 755 ~/.docker/cli-plugins/docker-buildx
+    - "echo -e '{\n \"experimental\": \"enabled\"\n}' | tee ~/.docker/config.json"
     - docker buildx create --name platformbuilder --use
     - docker buildx inspect --bootstrap
   script:
