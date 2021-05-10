@@ -4,7 +4,7 @@ void IOHandler::writeToCsv(cluon::data::TimeStamp timeStamp, double actualGround
     const char columnSeparator = ',';
     uint64_t time;
     if(csvFile.is_open() && !csvFile.fail()) {
-        time = (uint64_t) timeStamp.seconds() * 1000000 + timeStamp.microseconds();
+        time = cluon::time::toMicroseconds(timeStamp);
         csvFile << time << columnSeparator
                 << actualGroundSteering << columnSeparator
                 << calculatedSteeringAngle << std::endl;
@@ -47,3 +47,10 @@ bool IOHandler::closeCsvFile(std::fstream &csvFile){
     }
     return true;
 }
+
+void IOHandler::printToTerminal(cluon::data::TimeStamp timeStamp, double calculatedSteeringAngle) {
+    uint64_t time;
+    time = cluon::time::toMicroseconds(timeStamp);
+    std::cout << "group_04;" << time << ";" << calculatedSteeringAngle << std::endl;
+}
+

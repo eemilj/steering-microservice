@@ -146,6 +146,7 @@ int32_t main(int32_t argc, char **argv) {
                     }
 
                     IOHandler::writeToCsv(timeStamp, gsr.groundSteering(), steeringAngle, csvFile);
+                    IOHandler::printToTerminal(timeStamp,steeringAngle);
                 }
                 std::cout << "Valid frame percentage: " << double(frameCounter)/double(realFrameCounter)*100 << "%" << std::endl;
 
