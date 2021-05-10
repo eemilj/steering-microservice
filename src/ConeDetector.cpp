@@ -23,8 +23,8 @@ std::pair<cone, cone> ConeDetector::findCenterCoordinate(const cv::Mat& image) {
         foundCones.first.position.y = foundCones.first.boundingRectangle.y + foundCones.first.boundingRectangle.width/2;
         if(contours.size() > 1) {
             foundCones.second.boundingRectangle = cv::boundingRect(contours[1]);
-            foundCones.second.position.x = foundCones.first.boundingRectangle.x + foundCones.first.boundingRectangle.width/2;
-            foundCones.second.position.y = foundCones.first.boundingRectangle.y + foundCones.first.boundingRectangle.width/2;
+            foundCones.second.position.x = foundCones.second.boundingRectangle.x + foundCones.second.boundingRectangle.width/2;
+            foundCones.second.position.y = foundCones.second.boundingRectangle.y + foundCones.second.boundingRectangle.width/2;
         }
     }
     return foundCones;
