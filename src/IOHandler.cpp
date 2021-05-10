@@ -1,6 +1,6 @@
-#include "IOCSVProducer.h"
+#include "IOHandler.h"
 
-void IOCSVProducer::writeToCsv(cluon::data::TimeStamp timeStamp, double actualGroundSteering, double calculatedSteeringAngle, std::fstream &csvFile){
+void IOHandler::writeToCsv(cluon::data::TimeStamp timeStamp, double actualGroundSteering, double calculatedSteeringAngle, std::fstream &csvFile){
     const char columnSeparator = ',';
     uint64_t time;
     if(csvFile.is_open() && !csvFile.fail()) {
@@ -13,7 +13,7 @@ void IOCSVProducer::writeToCsv(cluon::data::TimeStamp timeStamp, double actualGr
     }
 }
 
-std::fstream IOCSVProducer::openCsvFile(const char* fileName){
+std::fstream IOHandler::openCsvFile(const char* fileName){
     const char columnSeparator = ',';
     std::fstream csvFile;
     csvFile.exceptions ( std::fstream::failbit | std::fstream::badbit );
@@ -30,7 +30,7 @@ std::fstream IOCSVProducer::openCsvFile(const char* fileName){
 }
 
 // https://stackoverflow.com/questions/4316442/stdofstream-check-if-file-exists-before-writing
-bool IOCSVProducer::fileExists(const std::string& filename) {
+bool IOHandler::fileExists(const std::string& filename) {
     struct stat buf = {};
     if (stat(filename.c_str(), &buf) != -1) {
         return true;
@@ -38,7 +38,7 @@ bool IOCSVProducer::fileExists(const std::string& filename) {
     return false;
 }
 
-bool IOCSVProducer::closeCsvFile(std::fstream &csvFile){
+bool IOHandler::closeCsvFile(std::fstream &csvFile){
     try {
         csvFile.close();
     }catch (std::fstream::failure& e) {

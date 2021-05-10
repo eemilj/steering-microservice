@@ -6,7 +6,7 @@
 #include "cluon-complete.hpp"
 #include <cstdio>
 
-class IOCSVProducer {
+class IOHandler {
 public:
     static void writeToCsv(cluon::data::TimeStamp timeStamp, double actualGroundSteering, double calculatedSteeringAngle, std::fstream &csvFile);
     static std::fstream openCsvFile(const char* fileName);

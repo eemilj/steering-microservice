@@ -120,6 +120,6 @@ add_executable(${PROJECT_NAME}-Runner
         src/ImageProcessor.cpp src/ConeDetector.cpp src/ImageRecognitionController.cpp
         src/SteeringAngleCalculator.cpp src/SteeringAngleCalculator.h
         test/ConeDetectorTester.cpp
-        src/IOCSVProducer.cpp src/IOCSVProducer.h test/IOCSVProducerTester.cpp test/SteeringAngleCalculatorTester.cpp)
+        src/IOHandler.cpp src/IOHandler.h test/IOHandlerTester.cpp test/SteeringAngleCalculatorTester.cpp)
 target_link_libraries(${PROJECT_NAME}-Runner ${LIBRARIES})
 add_test(NAME ${PROJECT_NAME}-Runner COMMAND ${PROJECT_NAME}-Runner)

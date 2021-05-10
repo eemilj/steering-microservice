@@ -19,7 +19,7 @@
 #include "cluon-complete.hpp"
 // Include the OpenDLV Standard Message Set that contains messages that are usually exchanged for automotive or robotic applications 
 #include "opendlv-standard-message-set.hpp"
-#include "IOCSVProducer.h"
+#include "IOHandler.h"
 
 // Include the GUI and image processing header files from OpenCV
 #include <opencv2/highgui/highgui.hpp>
@@ -95,7 +95,7 @@ int32_t main(int32_t argc, char **argv) {
             cluon::data::TimeStamp timeStamp;
             cv::Mat img, processedImg;
             double distanceReading, lastSteeringAngle = 0, upperBound = 0, lowerBound = 0;
-            std::fstream csvFile = IOCSVProducer::openCsvFile("csvOutput.csv");
+            std::fstream csvFile = IOHandler::openCsvFile("csvOutput.csv");
 
             while (od4.isRunning()) {
                 auto start = std::chrono::system_clock::now();
@@ -145,7 +145,7 @@ int32_t main(int32_t argc, char **argv) {
                         }
                     }
 
-                    IOCSVProducer::writeToCsv(timeStamp, gsr.groundSteering(), steeringAngle, csvFile);
+                    IOHandler::writeToCsv(timeStamp, gsr.groundSteering(), steeringAngle, csvFile);
                 }
                 std::cout << "Valid frame percentage: " << double(frameCounter)/double(realFrameCounter)*100 << "%" << std::endl;
 
@@ -161,7 +161,7 @@ int32_t main(int32_t argc, char **argv) {
                            << std::chrono::duration_cast<std::chrono::milliseconds>(end).count()
                            << " ms. " << std::endl;*/
             }
-            IOCSVProducer::closeCsvFile(csvFile);
+            IOHandler::closeCsvFile(csvFile);
         }
         retCode = 0;
     }
