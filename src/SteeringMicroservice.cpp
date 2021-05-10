@@ -19,6 +19,7 @@
 #include "cluon-complete.hpp"
 // Include the OpenDLV Standard Message Set that contains messages that are usually exchanged for automotive or robotic applications 
 #include "opendlv-standard-message-set.hpp"
+#include "IOCSVProducer.h"
 
 // Include the GUI and image processing header files from OpenCV
 #include <opencv2/highgui/highgui.hpp>
@@ -91,8 +92,10 @@ int32_t main(int32_t argc, char **argv) {
             // Endless loop; end the program by pressing Ctrl-C.
             int frameCounter = 0;
             int realFrameCounter = 0;
+            cluon::data::TimeStamp timeStamp;
             cv::Mat img, processedImg;
             double distanceReading, lastSteeringAngle = 0, upperBound = 0, lowerBound = 0;
+            std::fstream csvFile = IOCSVProducer::openCsvFile("csvOutput.csv");
 
             while (od4.isRunning()) {
                 auto start = std::chrono::system_clock::now();
@@ -104,13 +107,13 @@ int32_t main(int32_t argc, char **argv) {
                 // Lock the shared memory.
                 sharedMemory->lock();
                 {
+                    timeStamp = sharedMemory->getTimeStamp().second;
                     // Copy the pixels from the shared memory into our own data structure.
                     cv::Mat wrapped(HEIGHT, WIDTH, CV_8UC4, sharedMemory->data());
                     img = wrapped.clone();
                     std::lock_guard<std::mutex> lck(dsrMutex);
                     distanceReading = dsr.distance();
                 }
-                //std::cout << distanceReading << std::endl;
                 sharedMemory->unlock();
                 cones foundCones = ImageRecognitionController::findConeCoordinates(img);
 
@@ -141,6 +144,8 @@ int32_t main(int32_t argc, char **argv) {
                             frameCounter++;
                         }
                     }
+
+                    IOCSVProducer::writeToCsv(timeStamp, gsr.groundSteering(), steeringAngle, csvFile);
                 }
                 std::cout << "Valid frame percentage: " << double(frameCounter)/double(realFrameCounter)*100 << "%" << std::endl;
 
@@ -156,6 +161,7 @@ int32_t main(int32_t argc, char **argv) {
                            << std::chrono::duration_cast<std::chrono::milliseconds>(end).count()
                            << " ms. " << std::endl;*/
             }
+            IOCSVProducer::closeCsvFile(csvFile);
         }
         retCode = 0;
     }
