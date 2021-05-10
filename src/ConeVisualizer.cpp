@@ -2,33 +2,28 @@
 #include "ImageProcessor.h"
 #include "ConeDetector.h"
 
-// This is just for testing purposes, it can be deleted in the future.
-contours ConeVisualizer::testingContourDrawing(const cv::Mat &image) {
-    contours found;
-    cv::Mat processedImage;
-    cv::Scalar blueLow, blueHigh, yellowLow, yellowHigh;
-
-    blueLow = cv::Scalar(110, 140, 50); //100, 100, 45
-    blueHigh = cv::Scalar(130,255,100);
-
-    yellowLow = cv::Scalar(14, 100, 120);
-    yellowHigh = cv::Scalar(30,255,255);
-
-    processedImage = ImageProcessor::processImage(image, yellowLow, yellowHigh);
-    found.yellow = ConeDetector::detectContours(processedImage);
-    processedImage = ImageProcessor::processImage(image, blueLow, blueHigh);
-    found.blue = ConeDetector::detectContours(processedImage);
-    return found;
+cv::Point adjustPosition(const cv::Point& position) {
+    cv::Point adjustedPoint;
+    adjustedPoint.x = position.x;
+    adjustedPoint.y = position.y + 240;
+    return adjustedPoint;
 }
 
-cv::Mat ConeVisualizer::drawContoursImage(cv::Mat &image) {
+cv::Mat ConeVisualizer::drawContoursImage(cv::Mat &image, const cones& foundCones) {
+
     cv::Mat contourImage;
-    contourImage = cv::Mat(image.rows, image.cols, CV_8UC3, cv::Scalar(0,0,0));
-    contourImage = ImageProcessor::cropImage(contourImage, contourImage.cols, contourImage.rows);
-    contours contours;
-    contours = testingContourDrawing(image);
-    cv::drawContours(contourImage, contours.blue, -1, cv::Scalar(255,255,255), 1);
-    cv::drawContours(contourImage, contours.yellow, -1, cv::Scalar(255,255,255), 1);
+    contourImage = image.clone();
+    cv::Scalar blue = cv::Scalar(255, 0, 0);
+    cv::Scalar yellow = cv::Scalar(0, 255, 255);
+
+    cv::rectangle(contourImage, adjustPosition(foundCones.blue.first.boundingRectangle.tl()),
+                  adjustPosition(foundCones.blue.first.boundingRectangle.br()),blue,2);
+    cv::rectangle(contourImage, adjustPosition(foundCones.blue.second.boundingRectangle.tl()),
+                  adjustPosition(foundCones.blue.second.boundingRectangle.br()),blue,2);
+    cv::rectangle(contourImage, adjustPosition(foundCones.yellow.first.boundingRectangle.tl()),
+                  adjustPosition(foundCones.yellow.first.boundingRectangle.br()),yellow,2);
+    cv::rectangle(contourImage, adjustPosition(foundCones.yellow.second.boundingRectangle.tl()),
+                  adjustPosition(foundCones.yellow.second.boundingRectangle.br()),yellow,2);
     return contourImage;
 }
 

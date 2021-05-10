@@ -128,7 +128,7 @@ int32_t main(int32_t argc, char **argv) {
                 realFrameCounter++;
                 //std::cout << "Valid frame percentage: " << double(frameCounter)/double(realFrameCounter)*100 << "%" << std::endl;
                 cv::Mat contoursImage;
-                contoursImage = ConeVisualizer::drawContoursImage(img);
+                contoursImage = ConeVisualizer::drawContoursImage(img, foundCones);
                 {
                     std::lock_guard<std::mutex> lck(gsrMutex);
                     std::cout << "main: groundSteering = " << gsr.groundSteering() << std::endl;
