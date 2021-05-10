@@ -7,7 +7,7 @@ TEST_CASE("Test object position") {
     cv::Point rectangleOneTopLeft, rectangleOneBottomRight, rectangleTwoTopLeft, rectangleTwoBottomRight;
     cv::Scalar hi, lo, white, black;
     cv::Mat testImage, resultImage;
-    std::pair<cv::Point, cv::Point> foundPoints;
+    std::pair<cone, cone> foundPoints;
 
     //drawing first rectangle in the top left corner of the image
     rectangleOneTopLeft = cv::Point(10, 20); //20, 20
@@ -26,10 +26,10 @@ TEST_CASE("Test object position") {
 
     foundPoints = ConeDetector::findCenterCoordinate(testImage);
 
-    REQUIRE(foundPoints.first.x == EXPECTED_RESULT_ONE.x);
-    REQUIRE(foundPoints.first.y == EXPECTED_RESULT_ONE.y);
-    REQUIRE(foundPoints.second.x == EXPECTED_RESULT_TWO.x);
-    REQUIRE(foundPoints.second.y == EXPECTED_RESULT_TWO.y);
+    REQUIRE(foundPoints.first.position.x == EXPECTED_RESULT_ONE.x);
+    REQUIRE(foundPoints.first.position.y == EXPECTED_RESULT_ONE.y);
+    REQUIRE(foundPoints.second.position.x == EXPECTED_RESULT_TWO.x);
+    REQUIRE(foundPoints.second.position.y == EXPECTED_RESULT_TWO.y);
 }
 
 TEST_CASE("Test contours") {
