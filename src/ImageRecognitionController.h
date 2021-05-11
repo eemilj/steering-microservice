@@ -3,10 +3,11 @@
 
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+#include "ConeDetector.h"
 
 struct cones {
-    std::pair<cv::Point, cv::Point> blue = {};
-    std::pair<cv::Point, cv::Point> yellow = {};
+    std::pair<cone, cone> blue = {};
+    std::pair<cone, cone> yellow = {};
 };
 
 class ImageRecognitionController {

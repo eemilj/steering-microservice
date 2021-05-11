@@ -19,9 +19,10 @@
 #include "cluon-complete.hpp"
 // Include the OpenDLV Standard Message Set that contains messages that are usually exchanged for automotive or robotic applications 
 #include "opendlv-standard-message-set.hpp"
-#include "IOCSVProducer.h"
+#include "IOHandler.h"
 
 // Include the GUI and image processing header files from OpenCV
+#include <cmath>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
@@ -95,7 +96,7 @@ int32_t main(int32_t argc, char **argv) {
             cluon::data::TimeStamp timeStamp;
             cv::Mat img, processedImg;
             double distanceReading, lastSteeringAngle = 0, upperBound = 0, lowerBound = 0;
-            std::fstream csvFile = IOCSVProducer::openCsvFile("csvOutput.csv");
+            std::fstream csvFile = IOHandler::openCsvFile("csvOutput.csv");
 
             while (od4.isRunning()) {
                 auto start = std::chrono::system_clock::now();
@@ -119,49 +120,39 @@ int32_t main(int32_t argc, char **argv) {
 
                 double steeringAngle = SteeringAngleCalculator::outputSteeringAngle(lastSteeringAngle, foundCones, distanceReading);
                 lastSteeringAngle = steeringAngle;
-                std::cout << "Our gsr: " << steeringAngle << std::endl;
 
-//                if(steeringAngle != 0 && steeringAngle < 361){
-//                    frameCounter++;
-//                    //std::cout << "Valid frames: " << frameCounter << std::endl;
-//                }
                 realFrameCounter++;
-                //std::cout << "Valid frame percentage: " << double(frameCounter)/double(realFrameCounter)*100 << "%" << std::endl;
-                cv::Mat contoursImage;
-                contoursImage = ConeVisualizer::drawContoursImage(img);
                 {
                     std::lock_guard<std::mutex> lck(gsrMutex);
-                    std::cout << "main: groundSteering = " << gsr.groundSteering() << std::endl;
                     upperBound = gsr.groundSteering() + 0.5*gsr.groundSteering();
                     lowerBound = gsr.groundSteering() - 0.5*gsr.groundSteering();
-
-                    if(gsr.groundSteering() > 0 && (steeringAngle >= lowerBound) && (steeringAngle <= upperBound)){
+                    // TODO remove after testing is done
+                    if((gsr.groundSteering() > 0) && (steeringAngle >= lowerBound) && (steeringAngle <= upperBound)){
                         frameCounter++;
-                    } else if (gsr.groundSteering() < 0 && (steeringAngle <= lowerBound) && (steeringAngle >= upperBound)){
+                    } else if (((gsr.groundSteering() < 0) && (steeringAngle <= lowerBound) && (steeringAngle >= upperBound))){
                         frameCounter++;
-                    } else if (fabs(gsr.groundSteering()) == 0.0){
+                    } else if (fabsf(gsr.groundSteering() - 0) < std::numeric_limits<double>::epsilon()){
                         if (steeringAngle <= 0.05 && steeringAngle >= -0.05) {
                             frameCounter++;
                         }
                     }
 
-                    IOCSVProducer::writeToCsv(timeStamp, gsr.groundSteering(), steeringAngle, csvFile);
+                    IOHandler::writeToCsv(timeStamp, gsr.groundSteering(), steeringAngle, csvFile);
+                    IOHandler::printToTerminal(timeStamp, steeringAngle);
                 }
                 std::cout << "Valid frame percentage: " << double(frameCounter)/double(realFrameCounter)*100 << "%" << std::endl;
 
                 // Display image on your screen.
                 if (VERBOSE) {
-                    cv::imshow("img", img);
-                    cv::imshow("contours", contoursImage);
+                    cv::Mat rectangleImage;
+                    rectangleImage = ConeVisualizer::createDebugImage(img, foundCones, timeStamp, steeringAngle);
+                    cv::imshow("debug", rectangleImage);
                     cv::waitKey(1);
                 }
                 auto stop = std::chrono::system_clock::now();
                 auto end = stop - start;
-                /*std::cout  << " Process time: "
-                           << std::chrono::duration_cast<std::chrono::milliseconds>(end).count()
-                           << " ms. " << std::endl;*/
             }
-            IOCSVProducer::closeCsvFile(csvFile);
+            IOHandler::closeCsvFile(csvFile);
         }
         retCode = 0;
     }

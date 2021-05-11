@@ -33,7 +33,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} \
     -Wuninitialized -Wunreachable-code \
     -Wunused -Wunused-function -Wunused-label -Wunused-parameter -Wunused-but-set-parameter -Wunused-but-set-variable \
     -Wunused-value -Wunused-variable -Wunused-result \
-    -Wmissing-field-initializers -Wmissing-format-attribute -Wmissing-include-dirs -Wmissing-noreturn")
+    -Wmissing-field-initializers -Wmissing-format-attribute -Wmissing-include-dirs -Wmissing-noreturn -Werror")
 
 # Threads are necessary for linking the resulting binaries as the network communication is running inside a thread.
 set(THREADS_PREFER_PTHREAD_FLAG ON)
@@ -120,6 +120,7 @@ add_executable(${PROJECT_NAME}-Runner
         src/ImageProcessor.cpp src/ConeDetector.cpp src/ImageRecognitionController.cpp
         src/SteeringAngleCalculator.cpp src/SteeringAngleCalculator.h
         test/ConeDetectorTester.cpp
-        src/IOCSVProducer.cpp src/IOCSVProducer.h test/IOCSVProducerTester.cpp test/SteeringAngleCalculatorTester.cpp)
+        src/IOHandler.cpp src/IOHandler.h test/IOHandlerTester.cpp
+        test/SteeringAngleCalculatorTester.cpp test/ImageRecognitionControllerTester.cpp)
 target_link_libraries(${PROJECT_NAME}-Runner ${LIBRARIES})
 add_test(NAME ${PROJECT_NAME}-Runner COMMAND ${PROJECT_NAME}-Runner)
