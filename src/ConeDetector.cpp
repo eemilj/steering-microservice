@@ -32,28 +32,14 @@ std::pair<cone, cone> ConeDetector::findCenterCoordinate(const cv::Mat& image) {
 
 std::vector<std::vector<cv::Point>> ConeDetector::detectContours(const cv::Mat &image) {
     cv::Mat output;
-    std::vector<std::vector<cv::Point>> contours, approximatedContours, convexHulls, convexHulls3_10;
-    std::vector<cv::Point> approximatedContour, convexHull, convexHull3_10;
-    std::vector<cv::Rect> rect;
+    std::vector<std::vector<cv::Point>> contours, convexHulls;
+    std::vector<cv::Point> convexHull;
     cv::Canny(image, output, 80, 160);
     cv::findContours(output, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
-
-    // TODO check if first and third loops are needed
-    for(auto &contour : contours) {
-        cv::approxPolyDP(contour, approximatedContour, 10, true);
-        approximatedContours.push_back(approximatedContour);
-    }
 
     for(auto &contour : contours) {
         cv::convexHull(contour, convexHull);
         convexHulls.push_back(convexHull);
-    }
-
-    for(auto & i : convexHulls) {
-        if(i.size() >= 3 && i.size() <= 10) {
-            cv::convexHull(i, convexHull3_10);
-            convexHulls3_10.push_back(convexHull3_10);
-        }
     }
 
     return convexHulls;

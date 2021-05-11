@@ -22,6 +22,7 @@
 #include "IOHandler.h"
 
 // Include the GUI and image processing header files from OpenCV
+#include <cmath>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
@@ -119,25 +120,18 @@ int32_t main(int32_t argc, char **argv) {
 
                 double steeringAngle = SteeringAngleCalculator::outputSteeringAngle(lastSteeringAngle, foundCones, distanceReading);
                 lastSteeringAngle = steeringAngle;
-                std::cout << "Our gsr: " << steeringAngle << std::endl;
 
-//                if(steeringAngle != 0 && steeringAngle < 361){
-//                    frameCounter++;
-//                    //std::cout << "Valid frames: " << frameCounter << std::endl;
-//                }
                 realFrameCounter++;
-                //std::cout << "Valid frame percentage: " << double(frameCounter)/double(realFrameCounter)*100 << "%" << std::endl;
                 {
                     std::lock_guard<std::mutex> lck(gsrMutex);
-                    std::cout << "main: groundSteering = " << gsr.groundSteering() << std::endl;
                     upperBound = gsr.groundSteering() + 0.5*gsr.groundSteering();
                     lowerBound = gsr.groundSteering() - 0.5*gsr.groundSteering();
-
-                    if(gsr.groundSteering() > 0 && (steeringAngle >= lowerBound) && (steeringAngle <= upperBound)){
+                    // TODO remove after testing is done
+                    if((gsr.groundSteering() > 0) && (steeringAngle >= lowerBound) && (steeringAngle <= upperBound)){
                         frameCounter++;
-                    } else if (gsr.groundSteering() < 0 && (steeringAngle <= lowerBound) && (steeringAngle >= upperBound)){
+                    } else if (((gsr.groundSteering() < 0) && (steeringAngle <= lowerBound) && (steeringAngle >= upperBound))){
                         frameCounter++;
-                    } else if (fabs(gsr.groundSteering()) == 0.0){
+                    } else if (fabsf(gsr.groundSteering() - 0) < std::numeric_limits<double>::epsilon()){
                         if (steeringAngle <= 0.05 && steeringAngle >= -0.05) {
                             frameCounter++;
                         }
@@ -157,9 +151,6 @@ int32_t main(int32_t argc, char **argv) {
                 }
                 auto stop = std::chrono::system_clock::now();
                 auto end = stop - start;
-                /*std::cout  << " Process time: "
-                           << std::chrono::duration_cast<std::chrono::milliseconds>(end).count()
-                           << " ms. " << std::endl;*/
             }
             IOHandler::closeCsvFile(csvFile);
         }
