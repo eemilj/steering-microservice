@@ -39,7 +39,8 @@ before_script:
   - whoami
   - chmod +x CI_SET_UP.sh
   - ls
-  - bash CI_SET_UP.sh
+  - echo $SHELL
+  - sh CI_SET_UP.sh
   - ls
 
 # This section describes what shall be done to build and test the project.
