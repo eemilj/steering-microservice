@@ -20,7 +20,6 @@ image: registry.git.chalmers.se/courses/dit638/students/docker/docker:19.03.3
 variables:
   DOCKER_HOST: tcp://docker:2375
   DOCKER_TLS_CERTDIR: ""
-  STAGING_SECRET: ""
 
 services:
   - name: registry.git.chalmers.se/courses/dit638/students/docker/docker:19.03.3-dind
@@ -36,7 +35,7 @@ before_script:
   - docker info
   - apk add --update curl jq && rm -rf /var/cache/apk/*
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  - STAGING_SECRET = $(curl --header "PRIVATE-TOKEN:$PRIVATE_KEY" "https://git.chalmers.se/api/v4/projects/2292/jobs?scope[]=success" | jq ".[0] | .id")
+  - STAGING_SECRET:$(curl --header "PRIVATE-TOKEN:$PRIVATE_KEY" "https://git.chalmers.se/api/v4/projects/2292/jobs?scope[]=success" | jq ".[0] | .id")
   #- 'curl --location --output artifacts.zip --header "JOB-TOKEN: $CI_JOB_TOKEN" "https://git.chalmers.se/api/v4/projects/2292/jobs//artifacts"'
   - echo $STAGING_SECRET
 
