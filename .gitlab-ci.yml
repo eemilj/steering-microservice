@@ -33,9 +33,10 @@ stages:
 # Display information before we start the build.
 before_script:
   - docker info
-  - apk add --update curl && rm -rf /var/cache/apk/*
+  - apk add --update curl jq && rm -rf /var/cache/apk/*
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  - 'curl --location --output artifacts.zip --header "JOB-TOKEN: $CI_JOB_TOKEN" "https://git.chalmers.se/api/v4/courses/dit638/students/2021-group-04/-/jobs/119673/artifacts"'
+  #- 'curl --location --output artifacts.zip --header "JOB-TOKEN: $CI_JOB_TOKEN" "https://git.chalmers.se/api/v4/courses/dit638/students/2021-group-04/-/jobs/119673/artifacts"'
+  - 'curl --header "JOB-TOKEN: $CI_JOB_TOKEN" "https://git.chalmers.se/api/v4/courses/dit638/students/2021-group-04/-/jobs?scope[]=success" | jq ".[0] | .id"'
   - ls
 
 # This section describes what shall be done to build and test the project.
