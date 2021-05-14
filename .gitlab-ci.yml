@@ -36,9 +36,9 @@ before_script:
   - docker info
   - apk add --update curl jq && rm -rf /var/cache/apk/*
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  - STAGING_SECRET:$(curl --header "PRIVATE-TOKEN:$PRIVATE_KEY" "https://git.chalmers.se/api/v4/projects/2292/jobs?scope[]=success" | jq ".[0] | .id")
-  #- 'curl --location --output artifacts.zip --header "JOB-TOKEN: $CI_JOB_TOKEN" "https://git.chalmers.se/api/v4/projects/2292/jobs//artifacts"'
-  - echo $STAGING_SECRET
+  #- STAGING_SECRET:$(curl --header "PRIVATE-TOKEN:$PRIVATE_KEY" "https://git.chalmers.se/api/v4/projects/2292/jobs?scope[]=success" | jq ".[0] | .id")
+  - 'curl --location --output artifacts.zip --header "JOB-TOKEN: $CI_JOB_TOKEN" "https://git.chalmers.se/api/v4/projects/2292/jobs/$(curl --header "PRIVATE-TOKEN:$PRIVATE_KEY" "https://git.chalmers.se/api/v4/projects/2292/jobs?scope[]=success" | jq ".[0] | .id")/artifacts"'
+  #- echo $STAGING_SECRET
 
 # This section describes what shall be done to build and test the project.
 build-and-test:
