@@ -33,6 +33,7 @@ stages:
 # Display information before we start the build.
 before_script:
   - docker info
+  - apt-get install curl
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   - 'curl --location --output artifacts.zip --header "JOB-TOKEN: $CI_JOB_TOKEN" "https://git.chalmers.se/api/v4/courses/dit638/students/2021-group-04/-/jobs/119673/artifacts"'
   - ls
