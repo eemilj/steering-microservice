@@ -1,7 +1,6 @@
 import sys
 
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--no-sandbox')

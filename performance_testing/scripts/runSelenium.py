@@ -11,7 +11,7 @@ driver = webdriver.Chrome(executable_path='/selenium-drivers/chromedriver', chro
 driver.get('http://localhost:8081/recordings')
 
 
-if sys.argv[1]== '1':
+if sys.argv[1] == '1':
     print("\nIteration: $i" + sys.argv[1])
     driver.find_element_by_xpath('//*[@title="Replay CID-140-recording-2020-03-18_144821-selection.rec."]').click()
     driver.implicitly_wait(2000)
