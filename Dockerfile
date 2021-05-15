@@ -29,7 +29,8 @@ RUN cd /opt/sources && \
     lcov --list coverage.info && \
     genhtml coverage.info --output-directory coverage && \
     htmldoc --webpage coverage/src/index-sort-f.html $(find coverage/src -type f \( -iname \*gcov.html \)) --outfile report.pdf && \
-    cp -R build/ report.pdf /tmp
+    cp -R build/ report.pdf /tmp && \
+    mkdir csv
 
 # Second stage for packaging the software into a software bundle:
 FROM ubuntu:18.04
