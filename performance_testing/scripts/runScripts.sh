@@ -17,6 +17,7 @@ do
   docker stop steering
 done
 
+cp -r ./testCSV/csv_files/ csv_files
 docker stop h264
 docker stop opendlv-vehicle-view
 exit 0

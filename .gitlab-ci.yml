@@ -56,8 +56,6 @@ build-and-test:
     - docker cp `cat cid.txt`:/opt/report.pdf .
     - docker-compose up
     - docker rm `cat cid.txt`
-    - docker create --cidfile "cid2.txt" selenium:latest
-    - docker cp `cat cid2.txt`:/opt/testCSV/csv_files .
     - ls
   artifacts:
         when: always
