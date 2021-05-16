@@ -16,7 +16,7 @@ services:
   h264:
     build:
       context: ./opendlv-video-h264-decoder/
-      dockerfile: ./opendlv-video-h264-decoder/Dockerfile.amd64
+      dockerfile: Dockerfile.amd64
     restart: on-failure
     depends_on:
       - open-dlv
