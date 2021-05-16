@@ -5,17 +5,12 @@ sleep 5
 
 for i in 1 2 3 4 5
 do
+  echo Start Microservice
   ./runSteering.sh &
   python3 runSelenium.py $i
   echo Done with selenium
-  ls
-  echo List files
   ls csv_files
   cp -r csv_files testCSV
-  echo List files
-  ls testCSV
-  echo List files
-  ls /testCSV/csv
   mv ./testCSV/csv_files/csvOutput.csv ./testCSV/csv_files/$i.csv
   python3 plotCSV.py $i
   echo Done with plotting
