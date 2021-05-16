@@ -1,6 +1,7 @@
 #!/bin/sh
 echo STARTING SCRIPT
 python3 runSelenium.py memory
+sleep 5
 
 for i in 1 2 3 4 5
 do
