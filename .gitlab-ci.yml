@@ -42,7 +42,7 @@ before_script:
   - sh ./CI_SET_UP.sh
   - git --version
   - docker-compose --version
-  - docker-compose up
+  - docker-compose up -d
 
 # This section describes what shall be done to build and test the project.
 build-and-test:
