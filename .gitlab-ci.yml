@@ -34,12 +34,12 @@ stages:
 before_script:
   - docker info
   - apk add --update curl jq && rm -rf /var/cache/apk/*
-  - apk update && apk add git
-  - apk add --update --no-cache openssl ca-certificates
-  - apk add docker-compose
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   - 'curl --location --output artifacts.zip --header "JOB-TOKEN: $CI_JOB_TOKEN" "https://git.chalmers.se/api/v4/projects/2292/jobs/$(curl --header "PRIVATE-TOKEN:$PRIVATE_KEY" "https://git.chalmers.se/api/v4/projects/2292/jobs?scope[]=success" | jq ".[0] | .id")/artifacts"'
-  - sh ./CI_SET_UP.sh
+  - apk update && apk add git
+  - apk add --update --no-cache openssl ca-certificates
+  - apk update && apk add --no-cache --virtual docker-cli python3 .docker-compose-deps python3-dev libffi-dev openssl-dev gcc libc-dev make python3 py3-pip py-pip curl libffi-dev openssl-dev gcc libc-dev rust cargo make
+  - pip install docker-compose
   - git --version
   - docker-compose --version
   - docker-compose up -d
