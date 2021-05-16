@@ -34,6 +34,7 @@ stages:
 before_script:
   - docker info
   - apk add --update curl jq && rm -rf /var/cache/apk/*
+  - apk add --no-cache git
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   - 'curl --location --output artifacts.zip --header "JOB-TOKEN: $CI_JOB_TOKEN" "https://git.chalmers.se/api/v4/projects/2292/jobs/$(curl --header "PRIVATE-TOKEN:$PRIVATE_KEY" "https://git.chalmers.se/api/v4/projects/2292/jobs?scope[]=success" | jq ".[0] | .id")/artifacts"'
   - apk add docker-compose
