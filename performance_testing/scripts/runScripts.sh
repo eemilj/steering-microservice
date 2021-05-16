@@ -16,7 +16,7 @@ do
   ls testCSV
   echo List files
   ls /testCSV/csv
-  mv ./testCSV/csv/csvOutput.csv ./testCSV/csv/$i.csv
+  mv ./testCSV/csv_files/csvOutput.csv ./testCSV/csv_files/$i.csv
   python3 plotCSV.py $i
   echo Done with plotting
   docker stop steering
