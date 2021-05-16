@@ -8,7 +8,14 @@ do
   ./runSteering.sh &
   python3 runSelenium.py $i
   echo Done with selenium
+  ls
+  echo List files
+  ls csv_files
   cp -r csv_files testCSV
+  echo List files
+  ls testCSV
+  echo List files
+  ls /testCSV/csv
   mv ./testCSV/csv/csvOutput.csv ./testCSV/csv/$i.csv
   python3 plotCSV.py $i
   echo Done with plotting

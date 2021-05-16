@@ -35,6 +35,7 @@ elif sys.argv[1] == 'memory':
     driver.find_element_by_xpath('//*[@title="Replay CID-140-recording-2020-03-18_150001-selection.rec."]').click()
     time.sleep(5)
     driver.find_element_by_xpath('//*[@id="playButton"]').click()
+    print("Completing memory init")
     driver.quit()
     sys.exit()
 
