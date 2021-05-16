@@ -8,7 +8,6 @@ services:
     restart: on-failure
     network_mode: "host"
     volumes:
-      #- "/home/krasen/Dokument/DIT638/2021-group-04/recordings:/opt/vehicle-view/recordings"
       - $PWD/recordings:/opt/vehicle-view/recordings
       - /var/run/docker.sock:/var/run/docker.sock
     ports:

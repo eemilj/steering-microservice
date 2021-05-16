@@ -45,8 +45,8 @@ RUN apt-get update && \
     mkdir recordings
 
 ADD scripts/* /
-RUN chmod +x *.sh
-#COPY  /tmp/report.pdf .
+RUN chmod +x *.sh && \
+    mkdir testCSV
 # This is the entrypoint when starting the Docker container; hence, this Docker image is automatically starting our software on its creation
 CMD ["/runScripts.sh"]
 ENTRYPOINT ["bash"]
