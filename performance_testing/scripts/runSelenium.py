@@ -2,12 +2,14 @@ import sys
 import time
 
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
-chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument('--headless')
-chrome_options.add_argument('--no-sandbox')
-chrome_options.add_argument('--disable-gpu')
-driver = webdriver.Chrome(executable_path='/selenium-drivers/chromedriver', chrome_options=chrome_options)
+options = Options()
+options.add_argument('--headless')
+options.add_argument('--no-sandbox')
+options.add_argument('--disable-gpu')
+driver = webdriver.Chrome(executable_path='/selenium-drivers/chromedriver', options=options)
+print ("Headless Chrome Initialized")
 driver.get('http://localhost:8081/recordings')
 
 
@@ -46,4 +48,3 @@ while timeStart != driver.find_element_by_xpath('//*[@id="containerTimeStampUnix
 print("Last timestamp " + driver.find_element_by_xpath('//*[@id="containerTimeStampUnix"]').text)
 driver.quit()
 sys.exit()
-
