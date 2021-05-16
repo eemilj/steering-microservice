@@ -41,6 +41,7 @@ before_script:
   - sh CI_SET_UP.sh
   - apk update && apk upgrade
   - git --version
+  - docker run docker/compose:1.27.4 sh
   - docker-compose --version
   - docker-compose up -d
 
