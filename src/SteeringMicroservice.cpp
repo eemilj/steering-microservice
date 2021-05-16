@@ -96,7 +96,7 @@ int32_t main(int32_t argc, char **argv) {
             cluon::data::TimeStamp timeStamp;
             cv::Mat img, processedImg;
             double distanceReading, lastSteeringAngle = 0, upperBound = 0, lowerBound = 0;
-            std::fstream csvFile = IOHandler::openCsvFile("csv/csvOutput.csv");
+            std::fstream csvFile = IOHandler::openCsvFile("/csv_files/csvOutput.csv");
 
             while (od4.isRunning()) {
                 auto start = std::chrono::system_clock::now();

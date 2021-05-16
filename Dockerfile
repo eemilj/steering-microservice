@@ -29,8 +29,7 @@ RUN cd /opt/sources && \
     lcov --list coverage.info && \
     genhtml coverage.info --output-directory coverage && \
     htmldoc --webpage coverage/src/index-sort-f.html $(find coverage/src -type f \( -iname \*gcov.html \)) --outfile report.pdf && \
-    cp -R build/ report.pdf /tmp && \
-    mkdir csv
+    cp -R build/ report.pdf /tmp
 
 # Second stage for packaging the software into a software bundle:
 FROM ubuntu:18.04
@@ -51,5 +50,6 @@ WORKDIR /usr/bin
 COPY --from=builder /tmp/build/SteeringMicroservice .
 WORKDIR /opt
 COPY --from=builder /tmp/report.pdf .
+RUN mkdir /csv_files
 # This is the entrypoint when starting the Docker container; hence, this Docker image is automatically starting our software on its creation
 ENTRYPOINT ["/usr/bin/SteeringMicroservice"]
