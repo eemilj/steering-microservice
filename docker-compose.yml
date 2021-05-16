@@ -13,14 +13,28 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - "8081:8081"
-
+  h264:
+    build:
+      context: https://github.com/chalmers-revere/opendlv-video-h264-decoder.git
+      dockerfile: Dockerfile.amd64
+    restart: on-failure
+    depends_on:
+      - open-dlv
+    network_mode: "host"
+    container_name: h264
+    ipc: "host"
+    environment:
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - /tmp:/tmp
+    command: "--cid=253 --name=img"
   selenium:
     build: ./performance_testing/
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     container_name: selenium
     depends_on:
-      - open-dlv
+      - h264
     network_mode: "host"
     ipc: "host"
 
