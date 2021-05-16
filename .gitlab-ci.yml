@@ -41,6 +41,8 @@ before_script:
   - apk add --update docker-compose
   - apk update && apk upgrade
   - git --version
+  - git clone https://github.com/chalmers-revere/opendlv-video-h264-decoder.git
+  - ls
   - docker-compose --version
 
 # This section describes what shall be done to build and test the project.
