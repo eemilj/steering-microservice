@@ -16,8 +16,7 @@ do
   echo Done with plotting
   docker stop steering
 done
-
-cp -r ./testCSV/csv_files/ csv_files
+ls graphs
 docker stop h264
 docker stop opendlv-vehicle-view
 exit 0

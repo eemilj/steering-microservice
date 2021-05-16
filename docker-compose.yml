@@ -32,6 +32,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /csv_files:/csv_files
+      - /graphs:/graphs
     container_name: selenium
     depends_on:
       - h264

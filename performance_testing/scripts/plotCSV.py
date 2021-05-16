@@ -10,6 +10,6 @@ plt.plot(df['Timestamp'], df['ActualGroundSteering'], label="ActualGroundSteerin
 plt.xlabel('Timestamp')
 plt.ylabel('CalculatedSteeringAngle/ActualGroundSteering')
 plt.legend()
-plt.savefig('./testCSV/csv_files/' + sys.argv[1] +'.png')
+plt.savefig('./graphs/' + sys.argv[1] +'.png')
 
 sys.exit()
