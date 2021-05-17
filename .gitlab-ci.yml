@@ -65,6 +65,7 @@ build-and-test:
         paths:
           - report.pdf
           - graphs
+          - oldCSV
         expire_in: 2 weeks
         
 # This section describes what shall be done to deploy artefacts from the project.
