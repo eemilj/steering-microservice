@@ -52,6 +52,8 @@ build-and-test:
   stage: build
   script:
     - mkdir graphs
+    - cp artifacts.zip graphs
+    - ls graphs
     - docker build -t group4:latest -f Dockerfile .
     - docker create --cidfile "cid.txt" group4:latest
     - docker cp `cat cid.txt`:/opt/report.pdf .
