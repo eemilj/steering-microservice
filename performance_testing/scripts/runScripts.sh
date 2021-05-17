@@ -13,7 +13,7 @@ do
   cp -r csv_files testCSV
   mv ./testCSV/csv_files/csvOutput.csv ./testCSV/csv_files/$i.csv
 
-  cp -r csv_files oldCSV
+  cp -r csv_files/csv_files oldCSV
   rm -rf ./oldCSV/$i.csv
   mv ./oldCSV/csvOutput.csv ./oldCSV/$i.csv
 
