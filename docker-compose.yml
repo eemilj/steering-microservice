@@ -33,6 +33,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /csv_files:/csv_files
       - /builds/courses/dit638/students/2021-group-04/graphs:/graphs
+      - /builds/courses/dit638/students/2021-group-04/oldCSV:/oldCSV
     container_name: selenium
     depends_on:
       - h264

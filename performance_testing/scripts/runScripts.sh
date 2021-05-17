@@ -17,6 +17,7 @@ do
   docker stop steering
 done
 ls graphs
+ls oldCSV
 docker stop h264
 docker stop opendlv-vehicle-view
 exit 0
