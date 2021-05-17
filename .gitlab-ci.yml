@@ -42,6 +42,7 @@ before_script:
   - apk update && apk upgrade
   - git clone https://github.com/chalmers-revere/opendlv-video-h264-decoder.git
   - docker-compose --version
+  - ls -ld $PWD/*
 
 # This section describes what shall be done to build and test the project.
 build-and-test:
@@ -52,8 +53,8 @@ build-and-test:
   stage: build
   script:
     - mkdir graphs
+    - ls -ld graphs
     - cp artifacts.zip graphs
-    - ls graphs
     - docker build -t group4:latest -f Dockerfile .
     - docker create --cidfile "cid.txt" group4:latest
     - docker cp `cat cid.txt`:/opt/report.pdf .
