@@ -22,7 +22,7 @@ do
 done
 
 rm -rfv oldCSV/*
-cp -r tmpCSV oldCSV
+cp -a tmpCSV/. oldCSV
 ls graphs
 ls oldCSV
 docker stop h264
