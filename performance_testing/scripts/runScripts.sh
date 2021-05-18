@@ -13,14 +13,16 @@ do
   cp -r csv_files testCSV
   mv ./testCSV/csv_files/csvOutput.csv ./testCSV/csv_files/$i.csv
 
-  cp -r csv_files/csv_files oldCSV
-  rm -rf ./oldCSV/$i.csv
-  mv ./oldCSV/csvOutput.csv ./oldCSV/$i.csv
+  mkdir "tmpCSV"
+  cp ./testCSV/csv_files/$i.csv tmpCSV
 
   python3 plotCSV.py $i
   echo Done with plotting
   docker stop steering
 done
+
+rm -rfv oldCSV/*
+cp -r tmpCSV oldCSV
 ls graphs
 ls oldCSV
 docker stop h264
