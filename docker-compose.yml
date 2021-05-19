@@ -31,12 +31,11 @@ services:
     build: ./performance_testing/
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - $PWD/csv_files:/csv_files
-      - $PWD/graphs:/graphs
-      - $PWD/steering_CSV:/steering_CSV
+      - /csv_files:/csv_files
+      - /builds/courses/dit638/students/2021-group-04/graphs:/graphs
+      - /builds/courses/dit638/students/2021-group-04/oldCSV:/oldCSV
     container_name: selenium
     depends_on:
       - h264
     network_mode: "host"
     ipc: "host"
-
