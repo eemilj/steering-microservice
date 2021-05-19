@@ -43,10 +43,10 @@ timeStart = driver.find_element_by_xpath('//*[@id="containerTimeStampUnix"]').te
 time.sleep(2)
 
 while timeStart != driver.find_element_by_xpath('//*[@id="containerTimeStampUnix"]').text:
-    print(timeStart)
     timeStart = driver.find_element_by_xpath('//*[@id="containerTimeStampUnix"]').text
     time.sleep(2)
 
 print("Last timestamp " + driver.find_element_by_xpath('//*[@id="containerTimeStampUnix"]').text)
+
 driver.quit()
 sys.exit()
