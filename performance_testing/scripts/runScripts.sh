@@ -10,21 +10,20 @@ do
   python3 runSelenium.py $i
   echo Done with selenium
   ls csv_files
-  cp -a csv_files/. testCSV
-  mv ./testCSV/csvOutput.csv ./testCSV/$i.csv
+  cp -a csv_files/. outputCSV
+  mv ./outputCSV/csvOutput.csv ./outputCSV/$i.csv
 
-  mkdir "tmpCSV"
-  cp ./testCSV/$i.csv tmpCSV
+  mkdir tmpCSV
+  cp ./outputCSV/$i.csv tmpCSV
 
   python3 plotCSV.py $i
   echo Done with plotting
   docker stop steering
 done
 
-rm -rfv oldCSV/*
-cp -a tmpCSV/. oldCSV
-ls graphs
-ls oldCSV
+rm -rf steering_CSV/*
+cp -a tmpCSV/. steering_CSV
+
 docker stop h264
 docker stop opendlv-vehicle-view
 exit 0
