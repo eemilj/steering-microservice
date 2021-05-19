@@ -43,8 +43,10 @@ before_script:
   - git clone https://github.com/chalmers-revere/opendlv-video-h264-decoder.git
   - docker-compose --version
   - mkdir graphs
+  - mkdir artifacts
   - mkdir steering_CSV
-  - unzip artifacts.zip -d steering_CSV
+  - unzip artifacts.zip -d artifacts
+  - cp -a artifacts/steering_CSV/. steering_CSV
 
 # This section describes what shall be done to build and test the project.
 build-and-test:
