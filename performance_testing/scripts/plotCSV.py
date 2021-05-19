@@ -5,8 +5,8 @@ import pandas as pd
 dataFile = pd.read_csv('./outputCSV/' + sys.argv[1] + '.csv')
 oldFile = pd.read_csv('./steering_CSV/' + sys.argv[1] + '.csv')
 plt.plot(dataFile['Timestamp'], dataFile['CalculatedSteeringAngle'])
-plt.plot(dataFile['Timestamp'], oldFile['CalculatedSteeringAngle'], color='blue', linestyle='dashed', label="PreviousSteeringAngle")
-plt.plot(dataFile['Timestamp'], dataFile['CalculatedSteeringAngle'], color='orange', label="CalculatedSteeringAngle")
+plt.plot(dataFile['Timestamp'], oldFile['CalculatedSteeringAngle'], color='blue', label="PreviousSteeringAngle")
+plt.plot(dataFile['Timestamp'], dataFile['CalculatedSteeringAngle'], color='orange',linestyle='dashed', label="CalculatedSteeringAngle")
 plt.plot(dataFile['Timestamp'], dataFile['ActualGroundSteering'], color='green', label="ActualGroundSteering")
 
 plt.xlabel('Timestamp')
