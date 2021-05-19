@@ -14,7 +14,7 @@ services:
       - "8081:8081"
   h264:
     build:
-      context: ./opendlv-video-h264-decoder/
+      context: https://github.com/chalmers-revere/opendlv-video-h264-decoder.git
       dockerfile: Dockerfile.amd64
     restart: on-failure
     depends_on:
@@ -31,9 +31,9 @@ services:
     build: ./performance_testing/
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - $PWD/csv_files:/csv_files
-      - $PWD/graphs:/graphs
-      - $PWD/steering_CSV:/steering_CSV
+      - /csv_files:/csv_files
+      - /builds/courses/dit638/students/2021-group-04/graphs:/graphs
+      - /builds/courses/dit638/students/2021-group-04/steering_CSV:/steering_CSV
     container_name: selenium
     depends_on:
       - h264
