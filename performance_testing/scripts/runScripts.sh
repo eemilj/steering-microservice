@@ -10,11 +10,11 @@ do
   python3 runSelenium.py $i
   echo Done with selenium
   ls csv_files
-  cp -r csv_files testCSV
-  mv ./testCSV/csv_files/csvOutput.csv ./testCSV/csv_files/$i.csv
+  cp -a csv_files/. testCSV
+  mv ./testCSV/csvOutput.csv ./testCSV/$i.csv
 
   mkdir "tmpCSV"
-  cp ./testCSV/csv_files/$i.csv tmpCSV
+  cp ./testCSV/$i.csv tmpCSV
 
   python3 plotCSV.py $i
   echo Done with plotting
