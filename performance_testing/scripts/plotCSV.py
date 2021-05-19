@@ -3,15 +3,10 @@ import sys
 import pandas as pd
 
 dataFile = pd.read_csv('./outputCSV/' + sys.argv[1] + '.csv')
+oldFile = pd.read_csv('./steering_CSV/' + sys.argv[1] + '.csv')
 
 plt.plot(dataFile['Timestamp'], dataFile['CalculatedSteeringAngle'])
-
-try:
-    oldFile = pd.read_csv('./steering_CSV/' + sys.argv[1] + '.csv')
-    plt.plot(dataFile['Timestamp'], oldFile['CalculatedSteeringAngle'], color='blue', label="PreviousSteeringAngle")
-except Exception:
-    print("No such file found")
-
+plt.plot(dataFile['Timestamp'], oldFile['CalculatedSteeringAngle'], color='blue', label="PreviousSteeringAngle")
 plt.plot(dataFile['Timestamp'], dataFile['CalculatedSteeringAngle'], color='orange',linestyle='dashed', label="CalculatedSteeringAngle")
 plt.plot(dataFile['Timestamp'], dataFile['ActualGroundSteering'], color='green', label="ActualGroundSteering")
 
