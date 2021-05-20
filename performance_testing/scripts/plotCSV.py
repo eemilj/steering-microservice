@@ -3,8 +3,13 @@ import sys
 import pandas as pd
 
 def plotToSCV():
-    dataFile = pd.read_csv('./oldCSV/' + sys.argv[1] + '.csv')
+    dataFile = pd.read_csv('./outputCSV/' + sys.argv[1] + '.csv')
     oldFile = pd.read_csv('./steering_CSV/' + sys.argv[1] + '.csv')
+
+    previousPercentage = "Previous valid frame Percentage: " + caclulatePercentage(oldFile).__str__()
+    currentPercentage = "Current valid frame Percentage:" + caclulatePercentage(dataFile).__str__()
+    plt.plot([], [], ' ', label=previousPercentage)
+    plt.plot([], [], ' ', label=currentPercentage)
 
     plt.plot(dataFile['Timestamp'], dataFile['CalculatedSteeringAngle'])
     plt.plot(dataFile['Timestamp'], oldFile['CalculatedSteeringAngle'], color='blue', label="PreviousSteeringAngle")
@@ -12,28 +17,26 @@ def plotToSCV():
     plt.plot(dataFile['Timestamp'], dataFile['ActualGroundSteering'], color='green', label="ActualGroundSteering")
     plt.xlabel('Timestamp')
     plt.ylabel('CalculatedSteering/ActualGroundSteering/PreviousSteering')
-    previousPercentage = caclulatePercentage(oldFile)
-    currentPercentage = caclulatePercentage(dataFile)
-    plt.plot([], [], ' ', label="Previous valid frame Percentage: " + previousPercentage.__str__())
-    plt.plot([], [], ' ', label="Current valid frame Percentage:" + currentPercentage.__str__())
-    plt.legend()
-    plt.savefig('./graphs/' + sys.argv[1] + '.png')
+    plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.4), fancybox=True)
+    plt.savefig('./graphs/' + sys.argv[1] + '.png', bbox_inches='tight')
+    print(previousPercentage)
+    print(currentPercentage)
 
 def caclulatePercentage(file):
-    currentSteering = file['CalculatedSteeringAngle']
-    actualSteering = file['ActualGroundSteering']
+    currentSteerings = file['CalculatedSteeringAngle']
+    actualSteerings = file['ActualGroundSteering']
     frameCounter = 0
-    realFrameCounter = len(actualSteering)
+    realFrameCounter = len(actualSteerings)
     i = 0
-    for steering in actualSteering:
-        upperBound = actualSteering[i] + 0.5 * actualSteering[i]
-        lowerBound = actualSteering[i] - 0.5 * actualSteering[i]
-        if ((actualSteering[i] > 0) and (currentSteering[i] >= lowerBound) and (currentSteering[i] <= upperBound)):
+    for actualSteering in actualSteerings:
+        upperBound = actualSteering + 0.5 * actualSteering
+        lowerBound = actualSteering - 0.5 * actualSteering
+        if ((actualSteering > 0) and (currentSteerings[i] >= lowerBound) and (currentSteerings[i] <= upperBound)):
             frameCounter += 1
-        elif (((actualSteering[i] < 0) and (currentSteering[i] <= lowerBound) and (currentSteering[i] >= upperBound))):
+        elif (((actualSteering < 0) and (currentSteerings[i] <= lowerBound) and (currentSteerings[i] >= upperBound))):
             frameCounter += 1
         else:
-            if (currentSteering[i] <= 0.05 and currentSteering[i] >= -0.05):
+            if (currentSteerings[i] <= 0.05 and currentSteerings[i] >= -0.05):
                 frameCounter += 1
         realFrameCounter += 1
         i += 1
