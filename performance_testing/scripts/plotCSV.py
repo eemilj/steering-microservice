@@ -23,7 +23,7 @@ def plotToSCV():
     print(currentPercentage)
 
 def caclulatePercentage(file):
-    currentSteerings = file['CalculatedSteeringAngle']
+    calculatedSteerings = file['CalculatedSteeringAngle']
     actualSteerings = file['ActualGroundSteering']
     frameCounter = 0
     realFrameCounter = len(actualSteerings)
@@ -31,14 +31,15 @@ def caclulatePercentage(file):
     for actualSteering in actualSteerings:
         upperBound = actualSteering + 0.5 * actualSteering
         lowerBound = actualSteering - 0.5 * actualSteering
-        if ((actualSteering > 0) and (currentSteerings[i] >= lowerBound) and (currentSteerings[i] <= upperBound)):
-            frameCounter += 1
-        elif (((actualSteering < 0) and (currentSteerings[i] <= lowerBound) and (currentSteerings[i] >= upperBound))):
-            frameCounter += 1
-        else:
-            if (currentSteerings[i] <= 0.05 and currentSteerings[i] >= -0.05):
+        if (actualSteering > 0):
+            if (calculatedSteerings[i] >= lowerBound) and (calculatedSteerings[i] <= upperBound):
                 frameCounter += 1
-        realFrameCounter += 1
+        elif (actualSteering < 0):
+            if (calculatedSteerings[i] <= lowerBound) and (calculatedSteerings[i] >= upperBound):
+                frameCounter += 1
+        else:
+            if (calculatedSteerings[i] <= 0.05 and calculatedSteerings[i] >= -0.05):
+                frameCounter += 1
         i += 1
 
     percentage = frameCounter / realFrameCounter * 100
