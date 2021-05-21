@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include "IOHandler.h"
+#include "IOHandler.hpp"
 
 TEST_CASE("Test to create a file") {
     std::fstream OStream = IOHandler::openCsvFile("testFile");

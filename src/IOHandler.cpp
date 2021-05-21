@@ -1,6 +1,6 @@
-#include "IOHandler.h"
+#include "IOHandler.hpp"
 
-void IOHandler::writeToCsv(cluon::data::TimeStamp timeStamp, double actualGroundSteering, double calculatedSteeringAngle, std::fstream &csvFile){
+void IOHandler::writeToCsv(const cluon::data::TimeStamp &timeStamp, const double &actualGroundSteering, const double &calculatedSteeringAngle, std::fstream &csvFile){
     const char columnSeparator = ',';
     uint64_t time;
     if(csvFile.is_open() && !csvFile.fail()) {
@@ -48,7 +48,7 @@ bool IOHandler::closeCsvFile(std::fstream &csvFile){
     return true;
 }
 
-void IOHandler::printToTerminal(cluon::data::TimeStamp timeStamp, double calculatedSteeringAngle) {
+void IOHandler::printToTerminal(const cluon::data::TimeStamp &timeStamp, const double &calculatedSteeringAngle) {
     uint64_t time;
     time = cluon::time::toMicroseconds(timeStamp);
     std::cout << "group_04;" << time << ";" << calculatedSteeringAngle << std::endl;

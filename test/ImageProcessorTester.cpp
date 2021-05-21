@@ -1,11 +1,7 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
-#include "ImageProcessor.h"
-// Best test
-TEST_CASE("Sanity check") {
-    REQUIRE(true);
-}
-// THIS WORKS!
+#include "ImageProcessor.hpp"
+
 TEST_CASE("Test crop function") {
     int width, height;
     cv::Mat image, output;
@@ -37,7 +33,7 @@ TEST_CASE("Test HSV shifting") {
     testImage = cv::Mat(480, 640, CV_8UC3, white);
     cv::rectangle(testImage, topLeft, bottomRight, blue, 1);
 
-    resultImage = ImageProcessor::filterImage(testImage, hi, lo);
+    resultImage = ImageProcessor::filterImage(testImage, lo, hi);
     testResult = cv::countNonZero(resultImage);
     REQUIRE(testResult == EXPECTED_RESULT);
 }

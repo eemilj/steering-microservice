@@ -1,13 +1,13 @@
-#include "ImageRecognitionController.h"
-#include "ImageProcessor.h"
-#include "ConeDetector.h"
+#include "ImageRecognitionController.hpp"
+#include "ImageProcessor.hpp"
+#include "ConeDetector.hpp"
 
 cones ImageRecognitionController::findConeCoordinates(const cv::Mat& image) {
     cones foundCones;
     cv::Mat processedImage;
     cv::Scalar blueLow, blueHigh, yellowLow, yellowHigh;
 
-    blueLow = cv::Scalar(110, 140, 50); //100, 100, 45
+    blueLow = cv::Scalar(110, 140, 50);
     blueHigh = cv::Scalar(130,255,100);
 
     yellowLow = cv::Scalar(14, 100, 120);

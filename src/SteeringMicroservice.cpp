@@ -19,17 +19,15 @@
 #include "cluon-complete.hpp"
 // Include the OpenDLV Standard Message Set that contains messages that are usually exchanged for automotive or robotic applications 
 #include "opendlv-standard-message-set.hpp"
-#include "IOHandler.h"
+#include "IOHandler.hpp"
 
 // Include the GUI and image processing header files from OpenCV
-#include <cmath>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-#include "ImageRecognitionController.h"
-#include "SteeringAngleCalculator.h"
-#include <chrono>
-#include "ConeVisualizer.h"
+#include "ImageRecognitionController.hpp"
+#include "SteeringAngleCalculator.hpp"
+#include "ConeVisualizer.hpp"
 
 int32_t main(int32_t argc, char **argv) {
     int32_t retCode{1};
@@ -72,7 +70,6 @@ int32_t main(int32_t argc, char **argv) {
                 // https://github.com/chrberger/libcluon/blob/master/libcluon/testsuites/TestEnvelopeConverter.cpp#L31-L40
                 std::lock_guard<std::mutex> lck(gsrMutex);
                 gsr = cluon::extractMessage<opendlv::proxy::GroundSteeringRequest>(std::move(env));
-                //std::cout << "lambda: groundSteering = " << gsr.groundSteering() << std::endl;
             };
 
             opendlv::proxy::DistanceReading dsr;
@@ -91,15 +88,12 @@ int32_t main(int32_t argc, char **argv) {
 
 
             // Endless loop; end the program by pressing Ctrl-C.
-            int frameCounter = 0;
-            int realFrameCounter = 0;
             cluon::data::TimeStamp timeStamp;
             cv::Mat img, processedImg;
-            double distanceReading, lastSteeringAngle = 0, upperBound = 0, lowerBound = 0;
-            std::fstream csvFile = IOHandler::openCsvFile("csvOutput.csv");
+            double distanceReading, lastSteeringAngle = 0;
+            std::fstream csvFile = IOHandler::openCsvFile("/csv_files/csvOutput.csv");
 
             while (od4.isRunning()) {
-                auto start = std::chrono::system_clock::now();
                 // OpenCV data structure to hold an image.
 
                 // Wait for a notification of a new frame.
@@ -121,26 +115,10 @@ int32_t main(int32_t argc, char **argv) {
                 double steeringAngle = SteeringAngleCalculator::outputSteeringAngle(lastSteeringAngle, foundCones, distanceReading);
                 lastSteeringAngle = steeringAngle;
 
-                realFrameCounter++;
                 {
-                    std::lock_guard<std::mutex> lck(gsrMutex);
-                    upperBound = gsr.groundSteering() + 0.5*gsr.groundSteering();
-                    lowerBound = gsr.groundSteering() - 0.5*gsr.groundSteering();
-                    // TODO remove after testing is done
-                    if((gsr.groundSteering() > 0) && (steeringAngle >= lowerBound) && (steeringAngle <= upperBound)){
-                        frameCounter++;
-                    } else if (((gsr.groundSteering() < 0) && (steeringAngle <= lowerBound) && (steeringAngle >= upperBound))){
-                        frameCounter++;
-                    } else if (fabsf(gsr.groundSteering() - 0) < std::numeric_limits<double>::epsilon()){
-                        if (steeringAngle <= 0.05 && steeringAngle >= -0.05) {
-                            frameCounter++;
-                        }
-                    }
-
                     IOHandler::writeToCsv(timeStamp, gsr.groundSteering(), steeringAngle, csvFile);
                     IOHandler::printToTerminal(timeStamp, steeringAngle);
                 }
-                std::cout << "Valid frame percentage: " << double(frameCounter)/double(realFrameCounter)*100 << "%" << std::endl;
 
                 // Display image on your screen.
                 if (VERBOSE) {
@@ -149,8 +127,6 @@ int32_t main(int32_t argc, char **argv) {
                     cv::imshow("debug", rectangleImage);
                     cv::waitKey(1);
                 }
-                auto stop = std::chrono::system_clock::now();
-                auto end = stop - start;
             }
             IOHandler::closeCsvFile(csvFile);
         }

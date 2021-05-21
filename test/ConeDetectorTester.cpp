@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include "ConeDetector.h"
+#include "ConeDetector.hpp"
 
 TEST_CASE("Test object position") {
     //Calculated center points of the two generated squares

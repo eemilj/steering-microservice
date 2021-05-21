@@ -50,5 +50,6 @@ WORKDIR /usr/bin
 COPY --from=builder /tmp/build/SteeringMicroservice .
 WORKDIR /opt
 COPY --from=builder /tmp/report.pdf .
+RUN mkdir /csv_files
 # This is the entrypoint when starting the Docker container; hence, this Docker image is automatically starting our software on its creation
 ENTRYPOINT ["/usr/bin/SteeringMicroservice"]
