@@ -1,6 +1,6 @@
 #include <cluon-complete.hpp>
-#include "ConeVisualizer.h"
-#include "ConeDetector.h"
+#include "ConeVisualizer.hpp"
+#include "ConeDetector.hpp"
 
 cv::Point adjustPosition(const cv::Point& position) {
     cv::Point adjustedPoint;
@@ -9,7 +9,7 @@ cv::Point adjustPosition(const cv::Point& position) {
     return adjustedPoint;
 }
 
-cv::Mat ConeVisualizer::createDebugImage(cv::Mat &image, const cones &foundCones, cluon::data::TimeStamp timeStamp, double steeringAngle) {
+cv::Mat ConeVisualizer::createDebugImage(const cv::Mat &image, const cones &foundCones, const cluon::data::TimeStamp &timeStamp, const double &steeringAngle) {
 
     cv::Mat debugImage;
     debugImage = image.clone();

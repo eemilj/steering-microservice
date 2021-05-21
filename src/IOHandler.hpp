@@ -8,11 +8,11 @@
 
 class IOHandler {
 public:
-    static void writeToCsv(cluon::data::TimeStamp timeStamp, double actualGroundSteering, double calculatedSteeringAngle, std::fstream &csvFile);
+    static void writeToCsv(const cluon::data::TimeStamp &timeStamp, const double &actualGroundSteering, const double &calculatedSteeringAngle, std::fstream &csvFile);
     static std::fstream openCsvFile(const char* fileName);
     static bool closeCsvFile(std::fstream &csvFile);
     static bool fileExists(const std::string& filename);
-    static void printToTerminal(cluon::data::TimeStamp timeStamp, double calculatedSteeringAngle);
+    static void printToTerminal(const cluon::data::TimeStamp &timeStamp, const double &calculatedSteeringAngle);
 };
 
 

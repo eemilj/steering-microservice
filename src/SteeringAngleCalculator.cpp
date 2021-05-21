@@ -1,4 +1,4 @@
-#include "SteeringAngleCalculator.h"
+#include "SteeringAngleCalculator.hpp"
 #include <cmath>
 #include <iostream>
 
@@ -10,24 +10,24 @@ double angle(const cv::Point& vector1, const cv::Point& vector2) {
     else if (cosAngle < -1.0) {
         return CV_PI;
     }
-    return std::acos(cosAngle)/CV_PI*180;
+    return std::acos(cosAngle)/CV_PI*HALF_CIRCLE_DEGREE;
 }
 
-double SteeringAngleCalculator::outputSteeringAngle(double lastSteeringAngle, const cones& foundCones, double distanceReading){
+double SteeringAngleCalculator::outputSteeringAngle(const double &lastSteeringAngle, const cones& foundCones, const double &distanceReading){
     double calculatedSteeringAngle = calculateSteeringAngle(foundCones);
     double steeringAngle;
 
-    if (distanceReading >= 0.7) {
+    if (distanceReading >= DISTANCE_READING_THRESHOLD) {
         return 0;
     }
     if((int)calculatedSteeringAngle == INVALID_ANGLE){
         return lastSteeringAngle;
     }
 
-    if((int)calculatedSteeringAngle < 90){
-        steeringAngle = -(0.29-(calculatedSteeringAngle/90)*0.29);
+    if((int)calculatedSteeringAngle < QUARTER_CIRCLE_DEGREE){
+        steeringAngle = -(MAX_STEERING_ANGLE-(calculatedSteeringAngle/QUARTER_CIRCLE_DEGREE)*MAX_STEERING_ANGLE);
     } else {
-        steeringAngle = (calculatedSteeringAngle/90)*0.29-0.29;
+        steeringAngle = (calculatedSteeringAngle/QUARTER_CIRCLE_DEGREE)*MAX_STEERING_ANGLE-MAX_STEERING_ANGLE;
     }
 
     return steeringAngle;
@@ -50,7 +50,7 @@ double SteeringAngleCalculator::calculateSteeringAngle(const cones& foundCones) 
         return blueConeAngle;
     }
 
-    if (abs(foundCones.yellow.second.position.x-320) < abs(320 - foundCones.blue.second.position.x)){
+    if (abs(foundCones.yellow.second.position.x - 320) < abs(320 - foundCones.blue.second.position.x)){
         return yellowConeAngle;
     }
     return blueConeAngle;

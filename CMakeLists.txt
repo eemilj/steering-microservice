@@ -116,11 +116,15 @@ add_custom_target(scrub
 # Testing
 enable_testing()
 add_executable(${PROJECT_NAME}-Runner
-        ${CMAKE_CURRENT_SOURCE_DIR}/test/ImageProcessorTester.cpp
-        src/ImageProcessor.cpp src/ConeDetector.cpp src/ImageRecognitionController.cpp
-        src/SteeringAngleCalculator.cpp src/SteeringAngleCalculator.h
+        test/ImageProcessorTester.cpp
+        src/ImageProcessor.cpp
+        src/ConeDetector.cpp
+        src/ImageRecognitionController.cpp
+        src/SteeringAngleCalculator.cpp
+        src/IOHandler.cpp
         test/ConeDetectorTester.cpp
-        src/IOHandler.cpp src/IOHandler.h test/IOHandlerTester.cpp
-        test/SteeringAngleCalculatorTester.cpp test/ImageRecognitionControllerTester.cpp)
+        test/IOHandlerTester.cpp
+        test/SteeringAngleCalculatorTester.cpp
+        test/ImageRecognitionControllerTester.cpp)
 target_link_libraries(${PROJECT_NAME}-Runner ${LIBRARIES})
 add_test(NAME ${PROJECT_NAME}-Runner COMMAND ${PROJECT_NAME}-Runner)

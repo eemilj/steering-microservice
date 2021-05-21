@@ -3,7 +3,7 @@
 
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-#include "ConeDetector.h"
+#include "ConeDetector.hpp"
 
 struct cones {
     std::pair<cone, cone> blue = {};

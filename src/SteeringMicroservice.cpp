@@ -19,15 +19,15 @@
 #include "cluon-complete.hpp"
 // Include the OpenDLV Standard Message Set that contains messages that are usually exchanged for automotive or robotic applications 
 #include "opendlv-standard-message-set.hpp"
-#include "IOHandler.h"
+#include "IOHandler.hpp"
 
 // Include the GUI and image processing header files from OpenCV
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-#include "ImageRecognitionController.h"
-#include "SteeringAngleCalculator.h"
-#include "ConeVisualizer.h"
+#include "ImageRecognitionController.hpp"
+#include "SteeringAngleCalculator.hpp"
+#include "ConeVisualizer.hpp"
 
 int32_t main(int32_t argc, char **argv) {
     int32_t retCode{1};

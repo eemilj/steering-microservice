@@ -1,6 +1,6 @@
 #include "catch.hpp"
-#include "SteeringAngleCalculator.h"
-#include "ImageRecognitionController.h"
+#include "SteeringAngleCalculator.hpp"
+#include "ImageRecognitionController.hpp"
 
 
 TEST_CASE("Test calculation for steering angle") {

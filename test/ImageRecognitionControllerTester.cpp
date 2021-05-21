@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include "ImageRecognitionController.h"
+#include "ImageRecognitionController.hpp"
 
 TEST_CASE("Test find cone coordinates") {
     const int OFFSET = 20, CROP_VALUE = 240;
