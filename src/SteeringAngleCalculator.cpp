@@ -25,9 +25,9 @@ double SteeringAngleCalculator::outputSteeringAngle(double lastSteeringAngle, co
     }
 
     if((int)calculatedSteeringAngle < 90){
-        steeringAngle = -(0.3-(calculatedSteeringAngle/90)*0.3);
+        steeringAngle = -(0.29-(calculatedSteeringAngle/90)*0.29);
     } else {
-        steeringAngle = (calculatedSteeringAngle/90)*0.3-0.3;
+        steeringAngle = (calculatedSteeringAngle/90)*0.29-0.29;
     }
 
     return steeringAngle;
