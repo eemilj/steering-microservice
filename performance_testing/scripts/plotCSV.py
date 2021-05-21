@@ -10,7 +10,7 @@ def plotToSCV():
     currentPercentage = "Current valid frame Percentage:" + caclulatePercentage(dataFile).__str__()
     plt.plot([], [], ' ', label=previousPercentage)
     plt.plot([], [], ' ', label=currentPercentage)
-
+    plt.ticklabel_format(useOffset=False)
     plt.plot(dataFile['Timestamp'], dataFile['CalculatedSteeringAngle'])
     plt.plot(dataFile['Timestamp'], oldFile['CalculatedSteeringAngle'], color='blue', label="PreviousSteeringAngle")
     plt.plot(dataFile['Timestamp'], dataFile['CalculatedSteeringAngle'], color='orange', linestyle='dashed', label="CalculatedSteeringAngle")
