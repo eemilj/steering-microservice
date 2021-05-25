@@ -5,24 +5,23 @@ import pandas as pd
 def plotToSCV():
     dataFile = pd.read_csv('./outputCSV/' + sys.argv[1] + '.csv')
     oldFile = pd.read_csv('./steering_CSV/' + sys.argv[1] + '.csv')
-
-    previousPercentage = "Previous valid frame Percentage: " + caclulatePercentage(oldFile).__str__()
-    currentPercentage = "Current valid frame Percentage:" + caclulatePercentage(dataFile).__str__()
+    timeStamps = getTimeStamps(dataFile)
+    previousPercentage = "Previous valid frame Percentage: " + '{:.2f}'.format(calculatePercentage(oldFile))
+    currentPercentage = "Current valid frame Percentage: " + '{:.2f}'.format(calculatePercentage(dataFile))
     plt.plot([], [], ' ', label=previousPercentage)
     plt.plot([], [], ' ', label=currentPercentage)
     plt.ticklabel_format(useOffset=False)
-    plt.plot(dataFile['Timestamp'], dataFile['CalculatedSteeringAngle'])
-    plt.plot(dataFile['Timestamp'], oldFile['CalculatedSteeringAngle'], color='blue', label="PreviousSteeringAngle")
-    plt.plot(dataFile['Timestamp'], dataFile['CalculatedSteeringAngle'], color='orange', linestyle='dashed', label="CalculatedSteeringAngle")
-    plt.plot(dataFile['Timestamp'], dataFile['ActualGroundSteering'], color='green', label="ActualGroundSteering")
-    plt.xlabel('Timestamp')
-    plt.ylabel('CalculatedSteering/ActualGroundSteering/PreviousSteering')
+    plt.title(sys.argv[1])
+    plt.plot(timeStamps, dataFile['CalculatedSteeringAngle'])
+    plt.plot(timeStamps, oldFile['CalculatedSteeringAngle'], color='blue', label="PreviousSteeringAngle")
+    plt.plot(timeStamps, dataFile['CalculatedSteeringAngle'], color='orange', linestyle='dashed', label="CalculatedSteeringAngle")
+    plt.plot(timeStamps, dataFile['ActualGroundSteering'], color='green', label="ActualGroundSteering")
+    plt.xlabel('Delta Time in Seconds')
+    plt.ylabel('Ground Steering Request')
     plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.4), fancybox=True)
     plt.savefig('./graphs/' + sys.argv[1] + '.png', bbox_inches='tight')
-    print(previousPercentage)
-    print(currentPercentage)
 
-def caclulatePercentage(file):
+def calculatePercentage(file):
     calculatedSteerings = file['CalculatedSteeringAngle']
     actualSteerings = file['ActualGroundSteering']
     frameCounter = 0
@@ -44,6 +43,18 @@ def caclulatePercentage(file):
 
     percentage = frameCounter / realFrameCounter * 100
     return percentage
+
+
+def getTimeStamps(dataFile):
+    newTimeStamps = []
+    timeStamps = dataFile['Timestamp']
+    first = 0
+    for entry in timeStamps:
+        if first == 0:
+            first = entry
+        entry = (entry-first)/1000000
+        newTimeStamps.append(entry)
+    return newTimeStamps
 
 
 if __name__ == '__main__':
