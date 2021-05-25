@@ -35,8 +35,7 @@ before_script:
   - docker info
   - apk add --update curl jq && rm -rf /var/cache/apk/*
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  #- 'curl --location --output artifacts.zip --header "JOB-TOKEN: $CI_JOB_TOKEN" "https://git.chalmers.se/api/v4/projects/2292/jobs/$(curl --header "PRIVATE-TOKEN:$PRIVATE_KEY" "https://git.chalmers.se/api/v4/projects/2292/jobs?scope[]=success" | jq ".[0] | .id")/artifacts"'
-  - 'curl --location --output artifacts.zip --header "JOB-TOKEN: $CI_JOB_TOKEN" "https://git.chalmers.se/api/v4/projects/2292/jobs/123384/artifacts"'
+  - 'curl --location --output artifacts.zip --header "JOB-TOKEN: $CI_JOB_TOKEN" "https://git.chalmers.se/api/v4/projects/2292/jobs/$(curl --header "PRIVATE-TOKEN:$PRIVATE_KEY" "https://git.chalmers.se/api/v4/projects/2292/jobs?scope[]=success" | jq ".[0] | .id")/artifacts"'
   - apk update && apk add git
   - apk add --update --no-cache bash openssl ca-certificates unzip
   - apk add --update docker-compose
