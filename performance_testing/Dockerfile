@@ -46,7 +46,7 @@ RUN apt-get update && \
 
 ADD scripts/* /
 RUN chmod +x *.sh && \
-    mkdir outputCSV && \
+    mkdir current_CSV && \
     mkdir graphs && \
     mkdir steering_CSV
 # This is the entrypoint when starting the Docker container; hence, this Docker image is automatically starting our software on its creation

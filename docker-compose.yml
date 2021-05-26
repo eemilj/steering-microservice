@@ -30,6 +30,7 @@ services:
   selenium:
     build: ./performance_testing/
     volumes:
+      - $PWD/recordings:/recordings
       - /var/run/docker.sock:/var/run/docker.sock
       - /csv_files:/csv_files
       - /builds/courses/dit638/students/2021-group-04/graphs:/graphs
