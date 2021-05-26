@@ -13,6 +13,7 @@ def plotFromCSV():
     plt.ticklabel_format(useOffset=False)
     plt.title(sys.argv[1])
     plt.plot(timeStamps, dataFile['CalculatedSteeringAngle'])
+    plt.plot(timeStamps, oldFile['CalculatedSteeringAngle'], color='blue', label="PreviousSteeringAngle")
     plt.plot(timeStamps, dataFile['CalculatedSteeringAngle'], color='orange', linestyle='dashed', label="CalculatedSteeringAngle")
     plt.plot(timeStamps, dataFile['ActualGroundSteering'], color='green', label="ActualGroundSteering")
     plt.xlabel('Delta Time in Seconds')
