@@ -2,8 +2,8 @@ import matplotlib.pyplot as plt
 import sys
 import pandas as pd
 
-def plotToSCV():
-    dataFile = pd.read_csv('./outputCSV/' + sys.argv[1] + '.csv')
+def plotFromCSV():
+    dataFile = pd.read_csv('./current_CSV/' + sys.argv[1] + '.csv')
     oldFile = pd.read_csv('./steering_CSV/' + sys.argv[1] + '.csv')
     timeStamps = getTimeStamps(dataFile)
     previousPercentage = "Previous valid frame Percentage: " + '{:.2f}'.format(calculatePercentage(oldFile))
@@ -13,7 +13,6 @@ def plotToSCV():
     plt.ticklabel_format(useOffset=False)
     plt.title(sys.argv[1])
     plt.plot(timeStamps, dataFile['CalculatedSteeringAngle'])
-    plt.plot(timeStamps, oldFile['CalculatedSteeringAngle'], color='blue', label="PreviousSteeringAngle")
     plt.plot(timeStamps, dataFile['CalculatedSteeringAngle'], color='orange', linestyle='dashed', label="CalculatedSteeringAngle")
     plt.plot(timeStamps, dataFile['ActualGroundSteering'], color='green', label="ActualGroundSteering")
     plt.xlabel('Delta Time in Seconds')
@@ -58,5 +57,5 @@ def getTimeStamps(dataFile):
 
 
 if __name__ == '__main__':
-    plotToSCV()
+    plotFromCSV()
     sys.exit()

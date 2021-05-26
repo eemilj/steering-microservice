@@ -7,6 +7,7 @@ ARRAY=(*.rec)
 cd ..
 python3 runSelenium.py memory "${ARRAY[0]}"
 sleep 5
+mkdir tmp_CSV
 for ((i=0; i < $ITEMS; i++));
 do
   echo "${ARRAY[$i]}"
@@ -15,11 +16,10 @@ do
   python3 runSelenium.py "${ARRAY[$i]}"
   echo Done with selenium
   ls csv_files
-  cp -a csv_files/. outputCSV
-  mv ./outputCSV/csvOutput.csv ./outputCSV/"${ARRAY[$i]}".csv
+  cp -a csv_files/. current_CSV
+  mv ./current_CSV/csvOutput.csv ./current_CSV/"${ARRAY[$i]}".csv
 
-  mkdir tmpCSV
-  cp ./outputCSV/"${ARRAY[$i]}".csv tmpCSV
+  cp ./current_CSV/"${ARRAY[$i]}".csv tmp_CSV
 
   python3 plotCSV.py "${ARRAY[$i]}"
   echo Done with plotting
@@ -27,7 +27,7 @@ do
 done
 
 rm -rf steering_CSV/*
-cp -a tmpCSV/. steering_CSV
+cp -a tmp_CSV/. steering_CSV
 
 docker stop h264
 docker stop opendlv-vehicle-view
